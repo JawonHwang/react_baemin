@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { createContext, useState } from "react";
 import { CookiesProvider } from "react-cookie";
 import Baemin from "./pages/Bm/Bm";
+import Admin from "./pages/Admin/Admin";
 
 const LoginContext = createContext();
 
@@ -18,6 +19,7 @@ function App() {
           <Routes>
             {/* <Route path="/" element={<Login />} /> */}
             <Route path="/Baemin/*" element={<Baemin />} />
+            <Route path="/Admin/*" element={<Admin />} />
           </Routes>
         </CookiesProvider>
       </LoginContext.Provider>
