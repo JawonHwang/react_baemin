@@ -1,0 +1,118 @@
+.FullCalendar {
+    min-width: 733px;
+    font-size: 14px;
+    overflow: auto;
+}
+
+.FullCalendarMain {
+    flex-grow: 1;
+    padding-left: 3em;
+    padding-right: 3em;
+    padding-top: 0.5em;
+
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-container {
+    background: white;
+    padding: 30px;
+    width: 500px;
+}
+
+.modal-title {
+    font-size: 17px;
+    margin-bottom: 20px;
+    color: rgb(0, 20, 255);
+}
+
+.modal-container ul {
+    width: 100%;
+    list-style: none;
+    padding: 0px;
+    margin-left: 10px;
+    margin-bottom: 20px;
+}
+
+.modal-container ul li {
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.modal-container ul li span {
+    width: 25%;
+    font-size: 15px;
+    float: left;
+    display: flex;
+    align-items: center;
+}
+
+.modaltitle {
+    width: 75%;
+    min-height: 25px;
+    float: left;
+}
+
+.modaltime {
+    width: 75%;
+    min-height: 25px;
+    float: left;
+}
+
+.modalwrite {
+    width: 75%;
+    min-height: 25px;
+    float: left;
+}
+
+.modalcontents {
+    width: 75%;
+    min-height: 25px;
+    float: left;
+}
+
+.modal-buttons {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.check {
+    width: 70px;
+    height: 35px;
+    font-size: 15px;
+    border: none;
+    background-color: skyblue;
+    color: white;
+    margin: 0px 2px 0px 2px;
+}
+
+.check:hover {
+    background-color: rgb(100, 180, 255);
+}
+
+.delete {
+    width: 70px;
+    height: 35px;
+    font-size: 15px;
+    border: none;
+    background-color: coral;
+    color: white;
+    margin: 0px 2px 0px 2px;
+}
+
+.delete:hover {
+    background-color: rgb(255, 100, 100);
+}
