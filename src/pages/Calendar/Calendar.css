@@ -1,0 +1,80 @@
+.fc-daygrid-day-top {
+    display: block !important;
+}
+
+h2 {
+    font-size: 30px !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    display: block !important;
+}
+
+a[aria-label="토요일"] {
+    color: blue;
+}
+
+a[aria-label="일요일"] {
+    color: red;
+}
+
+th[role="columnheader"] {
+    background-color: rgba(128, 128, 128, 0.15);
+}
+
+.fc-day-sat .fc-daygrid-day-frame .fc-daygrid-day-top .fc-daygrid-day-number {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: blue
+}
+
+.fc-day-sun .fc-daygrid-day-frame .fc-daygrid-day-top .fc-daygrid-day-number {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: red
+}
+
+.centered-event {
+    color: red !important;
+    text-align: center !important;
+    z-index: 1;
+}
+
+.birthday-event {
+    border: 1px solid blue !important;
+    background-color: white !important;
+    text-align: center !important;
+    z-index: 2;
+    cursor: pointer !important;
+}
+
+.myData-event {
+    background-color: white !important;
+    text-align: center !important;
+    z-index: 3;
+}
+
+.myData-event:hover {
+    cursor: pointer !important;
+}
+
+.fc-button {
+    background-color: white !important;
+    color: black !important;
+    border: 1px solid black !important;
+}
+
+.fc-button:hover {
+    background-color: black !important;
+    color: white !important;
+    border: 1px solid black !important;
+}
+
+.fc-button:focus {
+    box-shadow: none !important;
+}
+
+.fc-daygrid-day {
+    height: 126px !important;
+}
+
+.fc-media-screen {
+    height: 850px !important;
+}
