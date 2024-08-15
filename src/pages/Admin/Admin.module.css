@@ -1,0 +1,38 @@
+.adminContainer {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+.sideBar {
+  font-family: "NanumBarunGothic"; 
+    width: 16%;
+    background-color: #042d43;
+    padding: 40px;
+    padding-top: 60px;
+    min-height: 91vh;
+    padding-left: 30px;
+  }
+  
+  .mainContent {
+    font-family: "NanumBarunGothic"; 
+    width: 84%;
+    height: 100%;
+  }
+  .adminContainer *::-webkit-scrollbar {
+    width: 6px;
+    height: 8px;
+  }
+  
+  .adminContainer *::-webkit-scrollbar-thumb {
+    /*  height: 30%;
+    background: #909090;
+    border-radius: 10px;  */
+  
+    background-color: #ccc;
+    border-radius: 10px !important;
+  }
+  
+  .adminContainer *::-webkit-scrollbar-track {
+    /* background: rgba(33, 122, 244, 0.1); */
+    background-color: #fafafa;
+  }
