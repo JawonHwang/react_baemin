@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { createContext, useState } from "react";
 import { CookiesProvider } from "react-cookie";
-import Baemin from "./pages/Baemin/Baemin";
+import Baemin from "./pages/Bm/Bm";
 
 const LoginContext = createContext();
 
