@@ -1,3 +1,6 @@
+# react_baemin
+React 배드민턴 동아리 웹 사이트 제작
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
