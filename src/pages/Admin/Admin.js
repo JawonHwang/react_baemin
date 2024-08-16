@@ -2,15 +2,31 @@ import { Route, Routes } from 'react-router-dom';
 import style from "./Admin.module.css";
 import SideBar from './SideBar/SideBar';
 import AdminDashboard from './AdminDashboard/AdminDashboard';
+import MembersManagement from './MembersManagement/MembersManagement';
+import AttendancesManagement from './AttendancesManagement/AttendancesManagement';
+import CompetitionsManagement from './CompetitionsManagement/CompetitionsManagement';
+import FAQsManagement from './FAQsManagement/FAQsManagement.js';
+import FeesManagement from './FeesManagement/FeesManagement';
+import NoticesManagement from './NoticesManagement/NoticesManagement';
+import QuestionsManagement from './QuestionsManagement/QuestionsManagement';
+import ReportsManagement from './ReportsManagement/ReportsManagement';
 const Admin = () => {
     return (
-        <div>
+        <div className={style.adminContainer}>
              <div className={style.sideBar}>
                 <SideBar></SideBar>
              </div>
-            <div>
+            <div className={style.mainContent}>
                 <Routes>
                     <Route path="/" element={<AdminDashboard />}></Route>
+                    <Route path="/toMembersManagement/*" element={<MembersManagement />}></Route>
+                    <Route path="/toAttendancesManagement/*" element={<AttendancesManagement />}></Route>
+                    <Route path="/toCompetitionsManagement/*" element={<CompetitionsManagement />}></Route>
+                    <Route path="/toFAQsManagement/*" element={<FAQsManagement />}></Route>
+                    <Route path="/toFeesManagement/*" element={<FeesManagement />}></Route>
+                    <Route path="/toNoticesManagement/*" element={<NoticesManagement />}></Route>
+                    <Route path="/toQuestionsManagement/*" element={<QuestionsManagement />}></Route>
+                    <Route path="/toReportsManagement/*" element={<ReportsManagement />}></Route>
                 </Routes>
             </div>
         </div >
