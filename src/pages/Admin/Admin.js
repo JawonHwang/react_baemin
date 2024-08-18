@@ -4,12 +4,14 @@ import SideBar from './SideBar/SideBar';
 import AdminDashboard from './AdminDashboard/AdminDashboard';
 import MembersManagement from './MembersManagement/MembersManagement';
 import AttendancesManagement from './AttendancesManagement/AttendancesManagement';
-import CompetitionsManagement from './CompetitionsManagement/CompetitionsManagement';
+import TournamentsManagement from './TournamentsManagement/TournamentsManagement.js';
 import FAQsManagement from './FAQsManagement/FAQsManagement.js';
 import FeesManagement from './FeesManagement/FeesManagement';
 import NoticesManagement from './NoticesManagement/NoticesManagement';
 import QuestionsManagement from './QuestionsManagement/QuestionsManagement';
 import ReportsManagement from './ReportsManagement/ReportsManagement';
+import AdminManagement from './AdminManagement/AdminManagement.js';
+import NonMemberManagement from './NonMemberManagement/NonMemberManagement.js';
 const Admin = () => {
     return (
         <div className={style.adminContainer}>
@@ -21,12 +23,14 @@ const Admin = () => {
                     <Route path="/" element={<AdminDashboard />}></Route>
                     <Route path="/toMembersManagement/*" element={<MembersManagement />}></Route>
                     <Route path="/toAttendancesManagement/*" element={<AttendancesManagement />}></Route>
-                    <Route path="/toCompetitionsManagement/*" element={<CompetitionsManagement />}></Route>
+                    <Route path="/toTournamentsManagement*" element={<TournamentsManagement />}></Route>
                     <Route path="/toFAQsManagement/*" element={<FAQsManagement />}></Route>
                     <Route path="/toFeesManagement/*" element={<FeesManagement />}></Route>
                     <Route path="/toNoticesManagement/*" element={<NoticesManagement />}></Route>
                     <Route path="/toQuestionsManagement/*" element={<QuestionsManagement />}></Route>
                     <Route path="/toReportsManagement/*" element={<ReportsManagement />}></Route>
+                    <Route path="/toAdminManagement/*" element={<AdminManagement />}></Route>
+                    <Route path="/toNonMemberManagement/*" element={<NonMemberManagement />}></Route>
                 </Routes>
             </div>
         </div >

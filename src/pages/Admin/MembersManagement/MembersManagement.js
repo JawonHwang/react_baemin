@@ -1,25 +1,49 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import style from "./MembersManagement.module.css";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Tooltip } from 'primereact/tooltip';
-//import { ProductService } from './service/ProductService';
+import 'primeicons/primeicons.css';
+
+
 const MembersManagement = () => {
     const [products, setProducts] = useState([]);
     const dt = useRef(null);
 
     const cols = [
-        { field: 'code', header: 'Code' },
-        { field: 'name', header: 'Name' },
-        { field: 'category', header: 'Category' },
-        { field: 'quantity', header: 'Quantity' }
+        { field: 'memId', header: 'ID' },
+        { field: 'memPw', header: 'PW' },
+        { field: 'memName', header: '이름' },
+        { field: 'memContact', header: '전화번호' },
+        { field: 'memEmail', header: '이메일' },
+        { field: 'memBirth', header: '생일' },
+        { field: 'memDept', header: '학과' },
+        { field: 'memStuId', header: '학번' },
+        { field: 'memGender', header: '성별' },
+        { field: 'memClubNum', header: '기수' },
+        { field: 'memTierId', header: '티어' },
+        { field: 'memJoinDate', header: '가입신청일자' },
+        { field: 'memApprovalDate', header: '승인일자' },
+        { field: 'role', header: '권한' }
     ];
 
     const exportColumns = cols.map((col) => ({ title: col.header, dataKey: col.field }));
 
-    /*useEffect(() => {
-        ProductService.getProductsMini().then((data) => setProducts(data));
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps*/
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        try {
+          const response = await axios.get('/api/admin/management/member');
+          console.log(response);
+          setProducts(response.data);
+        } catch (error) {
+          console.error('Error fetching data: ', error);
+        }
+      };
 
     const exportCSV = (selectionOnly) => {
         dt.current.exportCSV({ selectionOnly });
@@ -31,7 +55,7 @@ const MembersManagement = () => {
                 const doc = new jsPDF.default(0, 0);
 
                 doc.autoTable(exportColumns, products);
-                doc.save('products.pdf');
+                doc.save('회원목록.pdf');
             });
         });
     };
@@ -72,8 +96,9 @@ const MembersManagement = () => {
     );
 
     return (
-        <div>
-            <div>회원관리</div>
+        <div className={style.container}>
+            <div className={style.title}>회원관리</div>
+            <hr></hr>
             <div className="card">
                 <Tooltip target=".export-buttons>button" position="bottom" />
 

@@ -6,7 +6,7 @@
 
 .sideBar {
   font-family: "NanumBarunGothic"; 
-    width: 16%;
+    width: 13%;
     background-color: #054A29;
     padding-top: 5%;
     min-height: 91vh;
@@ -15,9 +15,13 @@
 
 .mainContent {
   font-family: "NanumBarunGothic"; 
-  width: 84%;
+  width: 87%;
   height: 100%;
+  padding-left: 2%;
+  padding-right: 2%;
+  padding-top: 3%;
 }
+
 
 .adminContainer *::-webkit-scrollbar {
   width: 6px;
