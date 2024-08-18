@@ -16,8 +16,13 @@ const SideBar = () => {
                 </Link>
             </div>
             <div className={style.menu}>
-                <Link className={`${style.link} ${location.pathname === '/admin/' && style.selected}`} to="/admin">
-                    비회원 신청관리
+                <Link className={`${style.link} ${location.pathname === '/admin/toNonMemberManagement' && style.selected}`} to="/admin/toNonMemberManagement">
+                    비회원 관리
+                </Link>
+            </div>
+            <div className={style.menu}>
+                <Link className={`${style.link} ${location.pathname === '/admin/toAdminManagement' && style.selected}`} to="/admin/toAdminManagement">
+                    관리자 관리
                 </Link>
             </div>
             <div className={style.menu}>
@@ -41,7 +46,7 @@ const SideBar = () => {
                 </Link>
             </div>
             <div className={style.menu}>
-                <Link className={`${style.link} ${location.pathname === '/admin/toCompetitionsManagement' && style.selected}`} to="/admin/toCompetitionsManagement">
+                <Link className={`${style.link} ${location.pathname === '/admin/toTournamentsManagement' && style.selected}`} to="/admin/toTournamentsManagement">
                     대회 관리
                 </Link>
             </div>

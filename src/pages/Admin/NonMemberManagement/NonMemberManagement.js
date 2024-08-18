@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import style from "./QuestionsManagement.module.css";
+import style from "./NonMemberManagement.module.css";
 
-const QuestionsManagement = () => {
+const NonMemberManagement = () => {
     
 
     return (
         <div className={style.container}>
-            <div className={style.title}>Q&A 관리</div>
+            <div className={style.title}>비회원 관리</div>
             <hr></hr>
             
         </div>
     );
 }
 
-export default QuestionsManagement;
+export default NonMemberManagement;

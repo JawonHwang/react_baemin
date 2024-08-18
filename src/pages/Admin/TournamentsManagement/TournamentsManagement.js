@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import style from "./QuestionsManagement.module.css";
+import style from "./TournamentsManagement.module.css";
 
-const QuestionsManagement = () => {
+const TournamentsManagement = () => {
     
 
     return (
         <div className={style.container}>
-            <div className={style.title}>Q&A 관리</div>
+            <div className={style.title}>대회 관리</div>
             <hr></hr>
             
         </div>
     );
 }
 
-export default QuestionsManagement;
+export default TournamentsManagement;
