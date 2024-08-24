@@ -1,92 +1,111 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import style from "./AdminManagement.module.css";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
-import { InputNumber } from 'primereact/inputnumber';
+import { Dropdown } from 'primereact/dropdown';
 
 const AdminManagement = () => {
     const [products, setProducts] = useState([]);
+    const [statuses] = useState(['회장', '부회장', '총무', '인사', '집행', '홍보']);
 
-    const columns = [
-        { field: 'ID', header: 'ID' },
-        { field: 'PW', header: 'PW' },
-        { field: 'NAME', header: '이름' },
-        { field: 'TEL', header: '전화번호' },
-        { field: 'EMAIL', header: '이메일' },
-        { field: 'BIRTH', header: '생일' },
-        { field: 'DEPT', header: '학과' },
-        { field: 'STU_ID', header: '학번' },
-        { field: 'GENDER', header: '성별' },
-        { field: 'TEL', header: '기수' },
-        { field: 'TEL', header: '티어' },
-        { field: 'TEL', header: '가입신청일자' },
-        { field: 'TEL', header: '승인일자' },
-        { field: 'TEL', header: '권한' }
-    ];
+    useEffect(() => {
+        fetchData();
+    }, []);
 
-    /*useEffect(() => {
-        ProductService.getProductsMini().then((data) => setProducts(data));
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps*/
-
-    const isPositiveInteger = (val) => {
-        let str = String(val);
-
-        str = str.trim();
-
-        if (!str) {
-            return false;
-        }
-
-        str = str.replace(/^0+/, '') || '0';
-        let n = Math.floor(Number(str));
-
-        return n !== Infinity && String(n) === str && n >= 0;
-    };
-
-    const onCellEditComplete = (e) => {
-        let { rowData, newValue, field, originalEvent: event } = e;
-
-        switch (field) {
-            case 'quantity':
-            case 'price':
-                if (isPositiveInteger(newValue)) rowData[field] = newValue;
-                else event.preventDefault();
-                break;
-
+    const mapAdminTypeName = (adminTypeName) => {
+        switch (adminTypeName) {
+            case 'PD':
+                return '회장';
+            case 'VP':
+                return '부회장';
+            case 'TR':
+                return '총무';
+            case 'HR':
+                return '인사';
+            case 'ED':
+                return '집행';
+            case 'PR':
+                return '홍보';
+            case 'SA':
+                return '시스템관리자';
             default:
-                if (newValue.trim().length > 0) rowData[field] = newValue;
-                else event.preventDefault();
-                break;
+                return adminTypeName;
         }
     };
 
-    const cellEditor = (options) => {
-        if (options.field === 'price') return priceEditor(options);
-        else return textEditor(options);
+    const fetchData = async () => {
+        try {
+            const response = await axios.get('/api/admin/management/admin/getAll');
+            const transformedData = response.data.map(admin => {
+                return {
+                    ...admin,
+                    adminType: {
+                        ...admin.adminType,
+                        adminTypeName: mapAdminTypeName(admin.adminType.adminTypeName)
+                    }
+                };
+            });
+
+            setProducts(transformedData);
+
+        } catch (error) {
+            console.error('Error fetching data: ', error);
+            alert("문제가 발생했습니다. 관리자에게 문의해 주세요.");
+        }
+    };
+
+    const onRowEditComplete = (e) => {
+        let _products = [...products];
+        let { newData, index } = e;
+
+        _products[index] = newData;
+
+        setProducts(_products);
     };
 
     const textEditor = (options) => {
-        return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} onKeyDown={(e) => e.stopPropagation()} />;
+        return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
     };
 
-    const priceEditor = (options) => {
-        return <InputNumber value={options.value} onValueChange={(e) => options.editorCallback(e.value)} mode="currency" currency="USD" locale="en-US" onKeyDown={(e) => e.stopPropagation()} />;
+    const statusEditor = (options) => {
+        return (
+            <Dropdown value={options.value} onChange={(e) => options.editorCallback(e.value)} options={statuses} optionLabel="name" 
+                placeholder="선택해주세요" />
+        );
     };
 
-    const priceBodyTemplate = (rowData) => {
-        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(rowData.price);
+    // 편집 가능한 조건
+    const allowEdit = (rowData) => {
+        return true;
     };
 
+    const col = [
+        { field: 'adminId', header: 'ID', style: { width: '180px'}, editor: (options) => textEditor(options)},
+        { field: 'member.memPw', header: 'PW', style: { width: '180px' }, editor: (options) => textEditor(options) },
+        { field: 'member.memName', header: '이름', style: { width: '150px' }, editor: (options) => textEditor(options) },
+        { field: 'member.memContact', header: '전화번호', style: { width: '150px' }, editor: (options) => textEditor(options) },
+        { field: 'member.memEmail', header: '이메일', style: { width: '220px' }, editor: (options) => textEditor(options) },
+        { field: 'member.memBirth', header: '생일', style: { width: '150px' }, editor: (options) => textEditor(options) },
+        { field: 'member.memDept', header: '학과', style: { width: '200px' }, editor: (options) => textEditor(options) },
+        { field: 'member.memStuId', header: '학번', style: { width: '150px' }, editor: (options) => textEditor(options) },
+        { field: 'member.memGender', header: '성별', style: { width: '80px' }, editor: (options) => textEditor(options) },
+        { field: 'member.memClubNum', header: '기수', style: { width: '80px' }, editor: (options) => textEditor(options) },
+        { field: 'member.memTierId', header: '티어', style: { width: '80px' }, editor: (options) => textEditor(options) },
+        { field: 'adminType.adminTypeName', header: '관리자 유형', style: { width: '150px' }, editor: (options) => statusEditor(options) }
+    ];
+    
     return (
         <div className={style.container}>
             <div className={style.title}>관리자 관리</div>
             <hr></hr>
             <div className="card p-fluid">
-                <DataTable value={products} editMode="cell" tableStyle={{ minWidth: '50rem' }}>
-                    {columns.map(({ field, header }) => {
-                        return <Column key={field} field={field} header={header} style={{ width: '25%' }} body={field === 'price' && priceBodyTemplate} editor={(options) => cellEditor(options)} onCellEditComplete={onCellEditComplete} />;
+                <DataTable value={products} editMode="row" dataKey="adminId" onRowEditComplete={onRowEditComplete} tableStyle={{ minWidth: '60rem' }}>
+                    {col.map(({ field, header, editor, style }) => {
+                        return <Column key={field} field={field} header={header} editor={editor} style={style}  />;
                     })}
+                    <Column rowEditor={allowEdit} headerStyle={{ width: '3%', minWidth: '5rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
                 </DataTable>
             </div>
         </div>

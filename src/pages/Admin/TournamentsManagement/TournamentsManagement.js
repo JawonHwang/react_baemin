@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+
 import style from "./TournamentsManagement.module.css";
 
 const TournamentsManagement = () => {
