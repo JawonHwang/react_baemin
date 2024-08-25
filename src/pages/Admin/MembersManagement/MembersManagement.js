@@ -4,13 +4,50 @@ import style from "./MembersManagement.module.css";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
-import { Tooltip } from 'primereact/tooltip';
-import 'primeicons/primeicons.css';
-
-
+import Export from '../Export/Export';
 const MembersManagement = () => {
     const [products, setProducts] = useState([]);
     const dt = useRef(null);
+    
+    const fetchData = async () => {
+        try {
+          const response = await axios.get('/api/admin/management/member/getAll');
+          setProducts(response.data);
+        } catch (error) {
+          console.error('Error fetching data: ', error);
+        }
+      };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+    
+    // 관리자 권한 부여 버튼 렌더링 함수
+    const renderAdminButton = (rowData) => {
+        return (
+            <Button 
+                label="권한 부여" 
+                icon="pi pi-lock" 
+                onClick={() => handleAdminGrant(rowData)} 
+                disabled={rowData.role === 'ADMIN'}  // 이미 관리자인 경우 버튼 비활성화
+            />
+        );
+    };
+
+    // 관리자 권한 부여 처리 함수
+    const handleAdminGrant = async (member) => {
+        try {
+            console.log(member);
+            await axios.put(`/api/admin/management/member/grant-role/${ member.memId }`);
+            /*setProducts((prevProducts) => 
+                prevProducts.map((p) => 
+                    p.memId === member.memId ? { ...p, role: 'ADMIN' } : p
+                )
+            );*/
+        } catch (error) {
+            console.error('Error granting admin role: ', error);
+        }
+    };
 
     const cols = [
         { field: 'memId', header: 'ID' },
@@ -26,87 +63,30 @@ const MembersManagement = () => {
         { field: 'memTierId', header: '티어' },
         { field: 'memJoinDate', header: '가입신청일자' },
         { field: 'memApprovalDate', header: '승인일자' },
-        { field: 'role', header: '권한' }
+        { field: 'role', header: '권한' },
+        { field: 'approval', header: '관리자 권한 부여', body: renderAdminButton }
     ];
 
-    const exportColumns = cols.map((col) => ({ title: col.header, dataKey: col.field }));
+    //const exportColumns = cols.map((col) => ({ title: col.header, dataKey: col.field }));
+    const exportColumns = cols
+    .filter(col => col.field !== 'approval')  // 'approval' 필드를 제외
+    .map(col => ({ title: col.header, dataKey: col.field }));
 
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    const fetchData = async () => {
-        try {
-          const response = await axios.get('/api/admin/management/member');
-          console.log(response);
-          setProducts(response.data);
-        } catch (error) {
-          console.error('Error fetching data: ', error);
-        }
-      };
-
-    const exportCSV = (selectionOnly) => {
-        dt.current.exportCSV({ selectionOnly });
-    };
-
-    const exportPdf = () => {
-        import('jspdf').then((jsPDF) => {
-            import('jspdf-autotable').then(() => {
-                const doc = new jsPDF.default(0, 0);
-
-                doc.autoTable(exportColumns, products);
-                doc.save('회원목록.pdf');
-            });
-        });
-    };
-
-    const exportExcel = () => {
-        import('xlsx').then((xlsx) => {
-            const worksheet = xlsx.utils.json_to_sheet(products);
-            const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
-            const excelBuffer = xlsx.write(workbook, {
-                bookType: 'xlsx',
-                type: 'array'
-            });
-
-            saveAsExcelFile(excelBuffer, 'products');
-        });
-    };
-
-    const saveAsExcelFile = (buffer, fileName) => {
-        import('file-saver').then((module) => {
-            if (module && module.default) {
-                let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-                let EXCEL_EXTENSION = '.xlsx';
-                const data = new Blob([buffer], {
-                    type: EXCEL_TYPE
-                });
-
-                module.default.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
-            }
-        });
-    };
-
-    const header = (
-        <div className="flex align-items-center justify-content-end gap-2">
-            <Button type="button" icon="pi pi-file" rounded onClick={() => exportCSV(false)} data-pr-tooltip="CSV" />
-            <Button type="button" icon="pi pi-file-excel" severity="success" rounded onClick={exportExcel} data-pr-tooltip="XLS" />
-            <Button type="button" icon="pi pi-file-pdf" severity="warning" rounded onClick={exportPdf} data-pr-tooltip="PDF" />
-        </div>
-    );
-
+    
+    
     return (
         <div className={style.container}>
             <div className={style.title}>회원관리</div>
             <hr></hr>
             <div className="card">
-                <Tooltip target=".export-buttons>button" position="bottom" />
-
-                <DataTable ref={dt} value={products} header={header} tableStyle={{ minWidth: '50rem' }}>
-                    {cols.map((col, index) => (
-                        <Column key={index} field={col.field} header={col.header} />
-                    ))}
-                </DataTable>
+                <Export dt={dt} exportColumns={exportColumns} products={products} />
+                <div className={style.dataTableWrapper}>
+                    <DataTable ref={dt} value={products} tableStyle={{ minWidth: '100rem' }}>
+                        {cols.map((col, index) => (
+                            <Column key={index} field={col.field} header={col.header} body={col.body}/>
+                        ))}
+                    </DataTable>
+                </div>
             </div>
         </div>
     );
