@@ -12,6 +12,7 @@ import QuestionsManagement from './QuestionsManagement/QuestionsManagement';
 import ReportsManagement from './ReportsManagement/ReportsManagement';
 import AdminManagement from './AdminManagement/AdminManagement.js';
 import NonMemberManagement from './NonMemberManagement/NonMemberManagement.js';
+import 'primeicons/primeicons.css';
 const Admin = () => {
     return (
         <div className={style.adminContainer}>
@@ -23,7 +24,7 @@ const Admin = () => {
                     <Route path="/" element={<AdminDashboard />}></Route>
                     <Route path="/toMembersManagement/*" element={<MembersManagement />}></Route>
                     <Route path="/toAttendancesManagement/*" element={<AttendancesManagement />}></Route>
-                    <Route path="/toTournamentsManagement*" element={<TournamentsManagement />}></Route>
+                    <Route path="/toTournamentsManagement/*" element={<TournamentsManagement />}></Route>
                     <Route path="/toFAQsManagement/*" element={<FAQsManagement />}></Route>
                     <Route path="/toFeesManagement/*" element={<FeesManagement />}></Route>
                     <Route path="/toNoticesManagement/*" element={<NoticesManagement />}></Route>
