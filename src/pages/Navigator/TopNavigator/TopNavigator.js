@@ -80,11 +80,11 @@ const TopNavigator = () => {
                         {/* <Menubar model={items} /> */}
                     </Row>
                 </Col>
-                <Col className={styles.header_center}>
+                {/* <Col className={styles.header_center}>
                     <Row>
                         빈칸
                     </Row>
-                </Col>
+                </Col> */}
                 <Col className={styles.header_right}>
                     <Row>
                         {/* {

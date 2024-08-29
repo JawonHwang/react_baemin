@@ -26,7 +26,6 @@ function App() {
           <Routes>
             {/* <Route path="/" element={<Login />} /> */}
             <Route path="/Baemin/*" element={<Baemin />} />
-            <Route path="/Admin/*" element={<Admin />} />
           </Routes>
         </CookiesProvider>
       </LoginContext.Provider>
