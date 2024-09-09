@@ -6,6 +6,10 @@ import { CookiesProvider } from "react-cookie";
 import axios from 'axios';
 import Baemin from "./pages/Bm/Bm";
 import Admin from "./pages/Admin/Admin";
+import 'primeicons/primeicons.css';
+import 'primeflex/primeflex.css';  
+import 'primereact/resources/primereact.css';
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
 
 export const LoginContext = createContext();
 
