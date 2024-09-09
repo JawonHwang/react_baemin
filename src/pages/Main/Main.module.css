@@ -1,3 +1,41 @@
 .container {
-    max-width: 90%;
+    background-color: black !important;
+    max-height: 8933px;
+    max-width: 1920px;
+}
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.4);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+}
+
+.mainText{
+    position: absolute;
+    width: 700px;
+    height: 635px;
+    left: 126px;
+    top: 114px;
+    
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 120px;
+    line-height: 106.24%;
+    /* or 127px */
+    letter-spacing: -0.02em;
+    background-color: black;
+    color: #FFFFFF;
+}
+
+.main{
+    color: white;
+}
+
+.main2{
+    color: #efff04;
 }
