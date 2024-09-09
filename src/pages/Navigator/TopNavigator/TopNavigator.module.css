@@ -2,3 +2,35 @@
     max-width: 1660px;
     height: 100%;
 }
+
+.container {
+    background-color: #f8f9fa;
+    padding: 20px;
+  }
+  
+  .header_left {
+    text-align: left;
+  }
+  
+  .header_right {
+    text-align: right;
+  }
+  
+  .linkurl {
+    margin: 0 15px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #333;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .linkurl:hover {
+    color: #007bff;
+  }
+  
+  .activeLink {
+    color: #007bff;
+  }
+  
