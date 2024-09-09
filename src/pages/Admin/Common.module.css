@@ -36,11 +36,21 @@
     align-items: center; 
     margin-top: 1%;
 }
+.flexBetween{
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+}
 .left{
     width: 10%;
     text-align: center;
     margin-right: 5%;
     padding: 8px;
+}
+.left2{
+    width: 10%;
+    text-align: center;
+    margin-right: 5%;
 }
 .right{
     width: 70%;
@@ -52,4 +62,17 @@
 .calendar{
     width: 90%;
     margin-top: 5%;
+}
+.p7{
+    padding: 7px;
+}
+
+
+.button1px{
+    border: 1px solid #054A29;
+    color: black;
+    font-weight: bold;
+    background-color: white;
+    padding: 10%;
+    width: 100px;
 }

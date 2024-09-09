@@ -93,7 +93,7 @@ const AdminManagement = () => {
         { field: 'member.memGender', header: '성별', style: { width: '80px' }, editor: (options) => textEditor(options) },
         { field: 'member.memClubNum', header: '기수', style: { width: '80px' }, editor: (options) => textEditor(options) },
         { field: 'member.memTierId', header: '티어', style: { width: '80px' }, editor: (options) => textEditor(options) },
-        { field: 'adminType.adminTypeName', header: '관리자 유형', style: { width: '150px' }, editor: (options) => statusEditor(options) }
+        { field: 'adminType.adminTypeName', header: '관리자 유형', style: { width: '200px' }, editor: (options) => statusEditor(options) }
     ];
     
     return (

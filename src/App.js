@@ -5,6 +5,10 @@ import { createContext, useState } from "react";
 import { CookiesProvider } from "react-cookie";
 import Baemin from "./pages/Bm/Bm";
 import Admin from "./pages/Admin/Admin";
+import 'primeicons/primeicons.css';
+import 'primeflex/primeflex.css';  
+import 'primereact/resources/primereact.css';
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
 
 const LoginContext = createContext();
 
