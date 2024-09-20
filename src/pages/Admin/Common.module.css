@@ -1,0 +1,78 @@
+.container{
+    width: 100%;
+}
+.title{
+    margin-bottom: 2%;
+    font-size: large;
+    font-weight: bold;
+}
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1%;
+}
+/*버튼*/
+.radius50{
+    border-radius: 50%;
+}
+.radius20{
+    border-radius: 29px;
+}
+.title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+}
+.common{
+    border: 2px solid #054A29;
+    border-radius: 15px;
+}
+.contents{
+    margin-right: 5%;
+}
+.flex{
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    margin-top: 1%;
+}
+.flexBetween{
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+}
+.left{
+    width: 10%;
+    text-align: center;
+    margin-right: 5%;
+    padding: 8px;
+}
+.left2{
+    width: 10%;
+    text-align: center;
+    margin-right: 5%;
+}
+.right{
+    width: 70%;
+}
+.list1{
+    background-color: #054A29;
+    color: white;
+}
+.calendar{
+    width: 90%;
+    margin-top: 5%;
+}
+.p7{
+    padding: 7px;
+}
+
+
+.button1px{
+    border: 1px solid #054A29;
+    color: black;
+    font-weight: bold;
+    background-color: white;
+    padding: 10%;
+    width: 100px;
+}

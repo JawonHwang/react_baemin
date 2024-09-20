@@ -1,15 +1,27 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { CookiesProvider } from "react-cookie";
+import axios from 'axios';
 import Baemin from "./pages/Bm/Bm";
+import Admin from "./pages/Admin/Admin";
+import 'primeicons/primeicons.css';
+import 'primeflex/primeflex.css';  
+import 'primereact/resources/primereact.css';
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
 
-const LoginContext = createContext();
+export const LoginContext = createContext();
 
 function App() {
 
   const [loginID, setLoginID] = useState("");
+
+  useEffect(() => {
+    axios.get("/api/member/isLogined").then(resp => {
+      setLoginID(resp.data);
+    }).catch(() => { })
+  }, [])
 
   return (
     <Router>
@@ -28,4 +40,3 @@ function App() {
 }
 
 export default App;
-export { LoginContext };
