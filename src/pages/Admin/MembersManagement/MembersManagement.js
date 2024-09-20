@@ -72,16 +72,21 @@ const MembersManagement = () => {
     .filter(col => col.field !== 'approval')  // 'approval' 필드를 제외
     .map(col => ({ title: col.header, dataKey: col.field }));
 
-    
+    const tableHeader = (
+        <div className="flex flex-wrap gap-2 align-items-center justify-content-between mb-3">
+            <div>
+                <Export dt={dt} exportColumns={exportColumns} products={products} />
+            </div>
+        </div>
+    );
     
     return (
         <div className={style.container}>
             <div className={style.title}>회원관리</div>
             <hr></hr>
             <div className="card">
-                <Export dt={dt} exportColumns={exportColumns} products={products} />
                 <div className={style.dataTableWrapper}>
-                    <DataTable ref={dt} value={products} tableStyle={{ minWidth: '100rem' }}>
+                    <DataTable ref={dt} value={products} header={tableHeader} tableStyle={{ minWidth: '100rem' }}>
                         {cols.map((col, index) => (
                             <Column key={index} field={col.field} header={col.header} body={col.body}/>
                         ))}

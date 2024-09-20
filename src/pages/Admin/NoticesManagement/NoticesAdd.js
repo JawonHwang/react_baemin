@@ -15,7 +15,7 @@ const NoticesAdd = () => {
     const [selectedCity, setSelectedCity] = useState(null);//분류
 
     const handleListClick = () => {
-        navigate('/admin/toNoticesManagement');
+        navigate('/baemin/admin/toNoticesManagement');
     };
 
     const handleClick = () => {

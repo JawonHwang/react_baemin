@@ -36,7 +36,7 @@ const TournamentsManagement = () => {
             <div className={style.title}>대회 관리</div>
             <hr></hr>
             <div className={style.buttons}>
-                <Link to="/admin/toTournamentsAdd"><Button type="button" className={style.radius50} icon="pi pi-plus" rounded outlined severity="info" /></Link>
+                <Link to="/baemin/admin/toTournamentsAdd"><Button type="button" className={style.radius50} icon="pi pi-plus" rounded outlined severity="info" /></Link>
             </div>
             <div className="card">
                 <DataTable value={products} tableStyle={{ minWidth: '50rem' }}>

@@ -16,7 +16,7 @@ const TournamentsAdd = () => {
     const [dialogValue, setDialogValue] = useState('');
 
     const handleListClick = () => {
-        navigate('/admin/toTournamentsManagement');
+        navigate('/baemin/admin/toTournamentsManagement');
     };
 
     const handleClick = () => {
