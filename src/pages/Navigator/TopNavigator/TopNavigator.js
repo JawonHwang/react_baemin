@@ -12,15 +12,18 @@ const TopNavigator = () => {
     const [activeLink, setActiveLink] = useState("");
     const [MemId, setMemId] = useState("");
     const [MemPw, setMemPw] = useState("");
-    const [MemPwCheck, setMemPwCheck] = useState("");
-    const [email, setEmail] = useState("");
-    const [department, setDepartment] = useState("");
-    const [studentId, setStudentId] = useState("");
-    const [generation, setGeneration] = useState("");
-    const [memName, setMemName] = useState("");
-    const [birthdate, setBirthdate] = useState("");
-    const [gender, setGender] = useState("");
-    const [phone, setPhone] = useState("");
+    const [id, setId] = useState('');
+    const [pw, setPw] = useState('');
+    const [pwcheck, setPwCheck] = useState('');
+    const [memEmail, setMemEmail] = useState('');
+    const [emailCheck, setEmailCheck] = useState('');
+    const [memDept, setMemDept] = useState('');
+    const [memStuId, setMemStuId] = useState('');
+    const [memClubNum, setMemClubNum] = useState('');
+    const [memName, setMemName] = useState('');
+    const [memBirth, setMemBirth] = useState('');
+    const [memGender, setMemGender] = useState('');
+    const [memContact, setMemContact] = useState('');
 
     const [loginDialogVisible, setLoginDialogVisible] = useState(false);
     const [registerDialogVisible, setRegisterDialogVisible] = useState(false);
@@ -40,9 +43,17 @@ const TopNavigator = () => {
     };
 
     const handleSignIn = () => {
-        axios.post("/api/member/login", { MemId, MemPw })
+        const formData = new FormData();
+        formData.append("MemId", MemId);
+        formData.append("MemPw", MemPw);
+
+        axios.post("/api/member/login", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
             .then(response => {
-                setLoginID(response.data.loginID);
+                setLoginID(MemId);
                 setLoginDialogVisible(false);
             })
             .catch(err => {
@@ -57,37 +68,81 @@ const TopNavigator = () => {
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
     // 핸드폰 번호 유효성 검사
-    const phoneRegex = /^\d{3}-\d{3,4}-\d{4}$/;
+    const phoneRegex = /^\d{3}\d{3,4}\d{4}$/;
 
     const handleRegister = () => {
-        if (!emailRegex.test(email)) {
+        if (!emailRegex.test(memEmail)) {
             alert("Invalid email format");
             return;
         }
 
-        if (!passwordRegex.test(MemPw)) {
+        if (!passwordRegex.test(pw)) {
             alert("Password must be at least 8 characters long and contain at least one number and one special character");
             return;
         }
 
-        if (MemPw !== MemPwCheck) {
+        if (pw !== pwcheck) {
             alert("Passwords do not match");
             return;
         }
 
-        if (!phoneRegex.test(phone)) {
+        if (!phoneRegex.test(memContact)) {
             alert("Invalid phone number format");
             return;
         }
+        
+        console.log(id,pw,memEmail,memDept,memStuId,memClubNum,memName,memBirth,memGender,memContact);
 
-        axios.post("/api/member/register", {
-            MemId, MemPw, email, department, studentId, generation, memName, birthdate, gender, phone
+        const formData = {
+            memId: id,
+            memPw: pw,
+            memEmail: memEmail,
+            memDept: memDept,
+            memStuId: memStuId,
+            memClubNum: memClubNum,
+            memName: memName,
+            memBirth: memBirth,
+            memGender: memGender,
+            memContact: memContact,
+        };
+
+        console.log(formData);
+        
+        axios.post("/api/member/register", formData, {
+            headers: {
+                "Content-Type": "application/json",
+            },
         })
             .then(() => {
                 setRegisterDialogVisible(false);
             })
             .catch(err => {
                 alert("Register failed! Please check your credentials.");
+            });
+    };
+
+     // Email verification
+     const handleEmailVerification = () => {
+        axios.post(`/api/member/register/${memEmail}`)
+            .then(() => {
+                alert("Verification code sent to your email.");
+            })
+            .catch(err => {
+                alert("Failed to send verification code.");
+            });
+    };
+
+    const verifyCode = () => {
+        axios.post(`/api/member/verify/${emailCheck}`)
+            .then(response => {
+                if (response.data === "success") {
+                    alert("성공");
+                } else {
+                    alert("Invalid verification code.");
+                }
+            })
+            .catch(err => {
+                alert("Verification failed.");
             });
     };
 
@@ -208,48 +263,53 @@ const TopNavigator = () => {
                 <div className="flex flex-column px-8 py-5 gap-4" style={{ borderRadius: '12px' }}>
                     <div className="inline-flex flex-column gap-2">
                         <label>ID</label>
-                        <InputText value={MemId} onChange={(e) => setMemId(e.target.value)} className="p-3" />
+                        <InputText value={id} onChange={(e) => setId(e.target.value)} className="p-3" />
                     </div>
                     <div className="inline-flex flex-column gap-2">
-                        <label>Password</label>
-                        <InputText type="password" value={MemPw} onChange={(e) => setMemPw(e.target.value)} className="p-3" />
+                        <label>비밀번호</label>
+                        <InputText type="password" value={pw} onChange={(e) => setPw(e.target.value)} className="p-3" />
                     </div>
                     <div className="inline-flex flex-column gap-2">
-                        <label>Confirm Password</label>
-                        <InputText type="password" value={MemPwCheck} onChange={(e) => setMemPwCheck(e.target.value)} className="p-3" />
+                        <label>비밀번호 확인</label>
+                        <InputText type="password" value={pwcheck} onChange={(e) => setPwCheck(e.target.value)} className="p-3" />
                     </div>
                     <div className="inline-flex flex-column gap-2">
                         <label>Email</label>
-                        <InputText value={email} onChange={(e) => setEmail(e.target.value)} className="p-3" />
+                        <InputText value={memEmail} onChange={(e) => setMemEmail(e.target.value)} className="p-3" />
+                        <Button label="emailCheck" onClick={handleEmailVerification} className="p-3 w-full" />
                     </div>
                     <div className="inline-flex flex-column gap-2">
-                        <label>Department</label>
-                        <InputText value={department} onChange={(e) => setDepartment(e.target.value)} className="p-3" />
+                        <label>Email 인증</label>
+                        <InputText value={emailCheck} onChange={(e) => setEmailCheck(e.target.value)} className="p-3" />
+                        <Button label="codeCheck" onClick={verifyCode} className="p-3 w-full" />
                     </div>
                     <div className="inline-flex flex-column gap-2">
-                        <label>Student ID</label>
-                        <InputText value={studentId} onChange={(e) => setStudentId(e.target.value)} className="p-3" />
+                        <label>학과</label>
+                        <InputText value={memDept} onChange={(e) => setMemDept(e.target.value)} className="p-3" />
                     </div>
                     <div className="inline-flex flex-column gap-2">
-                        <label>Generation</label>
-                        <InputText value={generation} onChange={(e) => setGeneration(e.target.value)} className="p-3" />
+                        <label>학번</label>
+                        <InputText value={memStuId} onChange={(e) => setMemStuId(e.target.value)} className="p-3" />
                     </div>
-
                     <div className="inline-flex flex-column gap-2">
-                        <label>Name</label>
+                        <label>기수</label>
+                        <InputText value={memClubNum} onChange={(e) => setMemClubNum(e.target.value)} className="p-3" />
+                    </div>
+                    <div className="inline-flex flex-column gap-2">
+                        <label>이름</label>
                         <InputText value={memName} onChange={(e) => setMemName(e.target.value)} className="p-3" />
                     </div>
                     <div className="inline-flex flex-column gap-2">
-                        <label>Birthdate</label>
-                        <InputText type="date" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} className="p-3" />
+                        <label>생년월일</label>
+                        <InputText type="date" value={memBirth} onChange={(e) => setMemBirth(e.target.value)} className="p-3" />
                     </div>
                     <div className="inline-flex flex-column gap-2">
-                        <label>Gender</label>
-                        <InputText value={gender} onChange={(e) => setGender(e.target.value)} className="p-3" />
+                        <label>성별</label>
+                        <InputText value={memGender} onChange={(e) => setMemGender(e.target.value)} className="p-3" />
                     </div>
                     <div className="inline-flex flex-column gap-2">
-                        <label>Phone</label>
-                        <InputText value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="010-0000-0000" className="p-3" />
+                        <label>전화번호</label>
+                        <InputText value={memContact} onChange={(e) => setMemContact(e.target.value)} placeholder="010-0000-0000" className="p-3" />
                     </div>
                     <div className="flex align-items-center gap-2">
                         <Button label="Register" onClick={handleRegister} className="p-3 w-full" />
