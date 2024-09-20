@@ -25,7 +25,7 @@ const NoticesCategoryAdd = () => {
     }, []);
 
     const handleListClick = () => {
-        navigate('/admin/toNoticesManagement');
+        navigate('/baemin/admin/toNoticesManagement');
     };
 
     const handleClick = () => {
