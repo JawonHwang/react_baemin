@@ -11,13 +11,13 @@ const SideBar = () => {
                 </Link>
             </div>
             <div className={style.menu}>
-                <Link className={`${style.link} ${location.pathname === '/baemin/admin/toMembersManagement' && style.selected}`} to="/baemin/admin/toMembersManagement">
-                    회원 관리
+                <Link className={`${style.link} ${location.pathname === '/baemin/admin/toNonMemberManagement' && style.selected}`} to="/baemin/admin/toNonMemberManagement">
+                    비회원 관리
                 </Link>
             </div>
             <div className={style.menu}>
-                <Link className={`${style.link} ${location.pathname === '/baemin/admin/toNonMemberManagement' && style.selected}`} to="/baemin/admin/toNonMemberManagement">
-                    비회원 관리
+                <Link className={`${style.link} ${location.pathname === '/baemin/admin/toMembersManagement' && style.selected}`} to="/baemin/admin/toMembersManagement">
+                    회원 관리
                 </Link>
             </div>
             <div className={style.menu}>
