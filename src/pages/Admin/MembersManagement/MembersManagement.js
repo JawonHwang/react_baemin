@@ -82,19 +82,41 @@ const MembersManagement = () => {
                 }
             }
     };
-
+    const onRowEditComplete = async (e) => {
+        let _products = [...products];
+        let { newData, index } = e;
+        console.log(newData);
+        const member = {
+                memClubNum: newData.memClubNum,
+                memTierId: newData.memTierId
+        };
+    
+        try {
+            await axios.put(`/api/admin/management/member/updateInfo/${newData.memId}`, member);
+            _products[index] = newData;
+            setProducts(_products);
+            alert("정보가 업데이트되었습니다.");
+            fetchData();
+        } catch (error) {
+            console.error('Error updating admin info:', error);
+            alert("업데이트 실패했습니다.");
+        }
+    };
+    const textEditor = (options) => {
+        return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
+    };
     const cols = [
-        { field: 'memId', header: 'ID' },
-        { field: 'memStuId', header: '학번' },
+        { field: 'memId', header: 'ID' , style: { minWidth: '150px' } },
+        { field: 'memStuId', header: '학번', style: { minWidth: '200px' } },
         { field: 'memName', header: '이름' },
         { field: 'memContact', header: '전화번호' },
         { field: 'memEmail', header: '이메일' },
         { field: 'memBirth', header: '생일' },
         { field: 'memDept', header: '학과' },
         { field: 'memGender', header: '성별' },
-        { field: 'memClubNum', header: '기수' },
-        { field: 'memTierId', header: '티어' },
-        { field: 'approval', header: '관리자 권한 부여', body: renderAdminButton },
+        { field: 'memClubNum', header: '기수', editor: (options) => textEditor(options) },
+        { field: 'memTierId', header: '티어', editor: (options) => textEditor(options) },
+        { field: 'approval', header: '관리자 권한 부여', body: renderAdminButton , style: { minWidth: '200px' }},
         {
             field: 'ban', 
             header: '정지', 
@@ -144,10 +166,11 @@ const MembersManagement = () => {
             <hr></hr>
             <div className="card">
                 <div className={style.dataTableWrapper}>
-                    <DataTable ref={dt} value={products} header={tableHeader} paginator rowsPerPageOptions={[5, 10, 25]} rows={10} sortable globalFilter={globalFilter} tableStyle={{ minWidth: '100rem' }}>
-                        {cols.map((col, index) => (
-                            <Column key={index} field={col.field} header={col.header} body={col.body} sortable/>
+                    <DataTable editMode="row" onRowEditComplete={onRowEditComplete} ref={dt} value={products} header={tableHeader} paginator rowsPerPageOptions={[5, 10, 25]} rows={10} sortable globalFilter={globalFilter} tableStyle={{ minWidth: '100rem' }}>
+                        {cols.map((col, index, editor, style) => (
+                            <Column key={index} field={col.field} header={col.header} editor={col.editor} body={col.body} style={style} sortable  />
                         ))}
+                        <Column rowEditor headerStyle={{ width: '3%', minWidth: '6rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
                     </DataTable>
                 </div>
             </div>
