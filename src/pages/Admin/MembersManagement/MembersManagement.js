@@ -94,6 +94,7 @@ const MembersManagement = () => {
         { field: 'memGender', header: '성별' },
         { field: 'memClubNum', header: '기수' },
         { field: 'memTierId', header: '티어' },
+        { field: 'approval', header: '관리자 권한 부여', body: renderAdminButton },
         {
             field: 'ban', 
             header: '정지', 
@@ -104,9 +105,9 @@ const MembersManagement = () => {
                     onClick={rowData.ban ? () => handleMemberBanCancel(rowData) : () => handleMemberBan(rowData)}
                 />
             )
-        },
+        }
         //{ field: 'role', header: '권한' },
-        { field: 'approval', header: '관리자 권한 부여', body: renderAdminButton }
+        
     ];
 
     const exportColumns = cols
@@ -129,10 +130,8 @@ const MembersManagement = () => {
     
 
     const tableHeader = (
-        <div className="flex flex-wrap gap-2 align-items-center justify-content-between mb-3">
-            <div>
-                <Export dt={dt} exportColumns={exportColumns} products={products} />
-            </div>
+        <div>
+            <Export dt={dt} exportColumns={exportColumns} products={products} />
         </div>
     );
     
@@ -145,7 +144,7 @@ const MembersManagement = () => {
             <hr></hr>
             <div className="card">
                 <div className={style.dataTableWrapper}>
-                    <DataTable ref={dt} value={products} header={tableHeader} sortable globalFilter={globalFilter} tableStyle={{ minWidth: '100rem' }}>
+                    <DataTable ref={dt} value={products} header={tableHeader} paginator rowsPerPageOptions={[5, 10, 25]} rows={10} sortable globalFilter={globalFilter} tableStyle={{ minWidth: '100rem' }}>
                         {cols.map((col, index) => (
                             <Column key={index} field={col.field} header={col.header} body={col.body} sortable/>
                         ))}

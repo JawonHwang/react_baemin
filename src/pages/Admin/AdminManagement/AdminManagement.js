@@ -11,7 +11,14 @@ import { Dropdown } from 'primereact/dropdown';
 
 const AdminManagement = () => {
     const [products, setProducts] = useState([]);
-    const [statuses] = useState(['회장', '부회장', '총무', '인사', '집행', '홍보']);
+    const [statuses] = useState([
+        { name: '회장', value: 'PD' },
+        { name: '부회장', value: 'VP' },
+        { name: '총무', value: 'TR' },
+        { name: '인사', value: 'HR' },
+        { name: '집행', value: 'ED' },
+        { name: '홍보', value: 'PR' },
+    ]);
     const [globalFilter, setGlobalFilter] = useState(''); //검색필터
 
     useEffect(() => {
@@ -19,7 +26,6 @@ const AdminManagement = () => {
     }, []);
 
     const mapAdminTypeName = (adminTypeName) => {
-        //if (!adminTypeName) return "정보 없음"; // null일 경우 처리
         switch (adminTypeName) {
             case 'PD':
                 return '회장';
@@ -43,18 +49,17 @@ const AdminManagement = () => {
     const fetchData = async () => {
         try {
             const response = await axios.get('/api/admin/management/admin/getAll');
-            console.log(response.data);
-            const transformedData = response.data.map(admin => {
-                return {
-                    ...admin,
-                    adminType: admin.adminType ? {
-                        ...admin.adminType,
-                        adminTypeName: mapAdminTypeName(admin.adminType.adminTypeName)
-                    } : {
-                        adminTypeName: "선택해주세요." // adminType이 null일 경우 기본값 설정
-                    }
-                };
-            });
+            const transformedData = response.data.map(admin => ({
+                ...admin,
+                adminType: admin.adminType ? {
+                    ...admin.adminType,
+                    adminTypeName: mapAdminTypeName(admin.adminType.adminTypeName),
+                    value: admin.adminType.adminTypeName
+                } : {
+                    adminTypeName: "선택해주세요.",
+                    value: null
+                }
+            }));
             setProducts(transformedData);
         } catch (error) {
             console.error('Error fetching data: ', error);
@@ -62,14 +67,39 @@ const AdminManagement = () => {
         }
     };
 
-    const onRowEditComplete = (e) => {
+    const onRowEditComplete = async (e) => {
         let _products = [...products];
         let { newData, index } = e;
-
-        _products[index] = newData;
-
-        setProducts(_products);
+        const adminData = {
+            adminType: newData.adminType,
+            member: {
+                //memId: newData.member.memId,
+                //memName: newData.member.memName,
+                //memContact: newData.member.memContact,
+                //memEmail: newData.member.memEmail,
+                //memBirth: newData.member.memBirth,
+                //memDept: newData.member.memDept,
+                //memGender: newData.member.memGender,
+                memClubNum: newData.member.memClubNum,
+                //memStuId: newData.member.memStuId,
+                memTierId: newData.member.memTierId,
+                //role: newData.role,
+                //ban: newData.member.ban
+            }
+        };
+    
+        try {
+            await axios.put(`/api/admin/management/admin/updateInfo/${newData.adminId}`, adminData);
+            _products[index] = newData;
+            setProducts(_products);
+            alert("정보가 업데이트되었습니다.");
+            fetchData();
+        } catch (error) {
+            console.error('Error updating admin info:', error);
+            alert("업데이트 실패했습니다.");
+        }
     };
+    
 
     const textEditor = (options) => {
         return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
@@ -77,8 +107,16 @@ const AdminManagement = () => {
 
     const statusEditor = (options) => {
         return (
-            <Dropdown value={options.value} onChange={(e) => options.editorCallback(e.value)} options={statuses} optionLabel="name" 
-                placeholder="선택해주세요" />
+            <Dropdown 
+                value={options.rowData.adminType.value}
+                onChange={(e) => {
+                    options.editorCallback(e.value);
+                    options.rowData.adminType.value = e.value;
+                }} 
+                options={statuses} 
+                optionLabel="name" 
+                placeholder="선택해주세요" 
+            />
         );
     };
 
@@ -130,14 +168,14 @@ const AdminManagement = () => {
     );
 
     const col = [
-        { field: 'adminId', header: 'ID', editor: (options) => textEditor(options)},
-        { field: 'member.memName', header: '이름', editor: (options) => textEditor(options) },
-        { field: 'member.memContact', header: '전화번호', editor: (options) => textEditor(options) },
-        { field: 'member.memEmail', header: '이메일', editor: (options) => textEditor(options) },
-        { field: 'member.memBirth', header: '생일', editor: (options) => textEditor(options) , style: { minWidth: '130px' }},
-        { field: 'member.memDept', header: '학과', editor: (options) => textEditor(options) },
-        { field: 'member.memStuId', header: '학번', editor: (options) => textEditor(options) },
-        { field: 'member.memGender', header: '성별', editor: (options) => textEditor(options), style: { minWidth: '70px' } },
+        { field: 'adminId', header: 'ID'},
+        { field: 'member.memName', header: '이름'},
+        { field: 'member.memContact', header: '전화번호'},
+        { field: 'member.memEmail', header: '이메일' },
+        { field: 'member.memBirth', header: '생일' , style: { minWidth: '130px' }},
+        { field: 'member.memDept', header: '학과' },
+        { field: 'member.memStuId', header: '학번' },
+        { field: 'member.memGender', header: '성별', style: { minWidth: '70px' } },
         { field: 'member.memClubNum', header: '기수', editor: (options) => textEditor(options), style: { minWidth: '70px' } },
         { field: 'member.memTierId', header: '티어', editor: (options) => textEditor(options), style: { minWidth: '70px' }  },
         { field: 'adminType.adminTypeName', header: '관리자 유형', style: { minWidth: '140px' }, editor: (options) => statusEditor(options) },
@@ -152,7 +190,7 @@ const AdminManagement = () => {
             </div>
             <hr></hr>
             <div className="card p-fluid">
-                <DataTable value={products}  editMode="row" dataKey="adminId" onRowEditComplete={onRowEditComplete} tableStyle={{ minWidth: '60rem' }} globalFilter={globalFilter}>
+                <DataTable value={products}  editMode="row" dataKey="adminId" onRowEditComplete={onRowEditComplete} tableStyle={{ minWidth: '60rem' }} globalFilter={globalFilter} paginator rowsPerPageOptions={[5, 10, 25]} rows={10}>
                     {col.map(({ field, header, editor, style, body }) => {
                         return <Column key={field} field={field} header={header} editor={editor} body={body} style={style} sortable />;
                     })}
