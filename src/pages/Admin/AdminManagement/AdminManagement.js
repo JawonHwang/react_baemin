@@ -19,6 +19,14 @@ const AdminManagement = () => {
         { name: '집행', value: 'ED' },
         { name: '홍보', value: 'PR' },
     ]);
+    const [tiers] = useState([
+        { label: 1, value: 'S' },
+        { label: 2, value: 'A' },
+        { label: 3, value: 'B' },
+        { label: 4, value: 'C' },
+        { label: 5, value: 'D' },
+        { label: 6, value: 'NEWB' },
+    ]);
     const [globalFilter, setGlobalFilter] = useState(''); //검색필터
 
     useEffect(() => {
@@ -45,7 +53,7 @@ const AdminManagement = () => {
                 return adminTypeName;
         }
     };
-
+    
     const fetchData = async () => {
         try {
             const response = await axios.get('/api/admin/management/admin/getAll');
@@ -73,18 +81,11 @@ const AdminManagement = () => {
         const adminData = {
             adminType: newData.adminType,
             member: {
-                //memId: newData.member.memId,
-                //memName: newData.member.memName,
-                //memContact: newData.member.memContact,
-                //memEmail: newData.member.memEmail,
-                //memBirth: newData.member.memBirth,
-                //memDept: newData.member.memDept,
-                //memGender: newData.member.memGender,
                 memClubNum: newData.member.memClubNum,
-                //memStuId: newData.member.memStuId,
-                memTierId: newData.member.memTierId,
-                //role: newData.role,
-                //ban: newData.member.ban
+
+                memberTier: {
+                    memTier: newData.member.memberTier.memTier
+                }
             }
         };
     
@@ -95,16 +96,16 @@ const AdminManagement = () => {
             alert("정보가 업데이트되었습니다.");
             fetchData();
         } catch (error) {
-            console.error('Error updating admin info:', error);
             alert("업데이트 실패했습니다.");
+            fetchData();
         }
     };
-    
 
     const textEditor = (options) => {
         return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
     };
 
+    //관리자유형 옵션
     const statusEditor = (options) => {
         return (
             <Dropdown 
@@ -120,6 +121,23 @@ const AdminManagement = () => {
         );
     };
 
+    //티어 옵션
+    const tiersEditor = (options) => {
+        return (
+            <Dropdown 
+                value={options.rowData.member.memberTier.memTier}
+                onChange={(e) => {
+                    options.editorCallback(e.value);
+                    options.rowData.member.memberTier.memTier = e.value;
+                }}
+                options={tiers}
+                optionLabel="value"
+                placeholder="선택해주세요" 
+            />
+        );
+    };
+    
+    
     // 편집 가능한 조건
     const allowEdit = (rowData) => {
         return true;
@@ -131,7 +149,7 @@ const AdminManagement = () => {
             <Button 
                 label="권한 취소" 
                 icon="pi pi-lock" 
-                onClick={() => handleAdminGrantCancle(rowData)} 
+                onClick={() => handleAdminGrantCancle(rowData)}
             />
         );
     };
@@ -143,10 +161,10 @@ const AdminManagement = () => {
             try {
                 await axios.post(`/api/admin/management/admin/revoke-role/${ admin.adminId }`);
                 alert("관리자 취소 성공했습니다.");
-
                 fetchData();
             } catch (error) {
                 alert("관리자 취소 실패했습니다.");
+                fetchData();
             }
         }
     };
@@ -177,7 +195,7 @@ const AdminManagement = () => {
         { field: 'member.memStuId', header: '학번' },
         { field: 'member.memGender', header: '성별', style: { minWidth: '70px' } },
         { field: 'member.memClubNum', header: '기수', editor: (options) => textEditor(options), style: { minWidth: '70px' } },
-        { field: 'member.memTierId', header: '티어', editor: (options) => textEditor(options), style: { minWidth: '70px' }  },
+        { field: 'member.memberTier.memTier', header: '티어', editor: (options) => tiersEditor(options), style: { minWidth: '70px' }  },
         { field: 'adminType.adminTypeName', header: '관리자 유형', style: { minWidth: '140px' }, editor: (options) => statusEditor(options) },
         { field: 'approvalCancle', header: '관리자 권한 취소', body: renderMemberButton, style: { minWidth: '180px' }}
     ];
