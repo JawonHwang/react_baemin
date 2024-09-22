@@ -37,7 +37,7 @@ const AdminManagement = () => {
         try {
             const response = await axios.get('/api/admin/management/admin/getAll');
             const transformedData = response.data.map(admin => {
-                const adminStatus = statuses.find(status => status.value === admin.adminType.adminTypeName);
+                const adminStatus = admin.adminType ? statuses.find(status => status.value === admin.adminType.adminTypeName) : null;
                 return {
                     ...admin,
                     adminType: adminStatus ? {
@@ -49,10 +49,8 @@ const AdminManagement = () => {
                     }
                 };
             });
-            console.log(transformedData);
             setProducts(transformedData);
         } catch (error) {
-            console.error('Error fetching data: ', error);
             alert("문제가 발생했습니다. 관리자에게 문의해 주세요.");
         }
     };
