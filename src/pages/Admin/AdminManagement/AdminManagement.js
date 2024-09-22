@@ -12,12 +12,12 @@ import { Dropdown } from 'primereact/dropdown';
 const AdminManagement = () => {
     const [products, setProducts] = useState([]);
     const [statuses] = useState([
-        { name: '회장', value: 'PD' },
-        { name: '부회장', value: 'VP' },
-        { name: '총무', value: 'TR' },
-        { name: '인사', value: 'HR' },
-        { name: '집행', value: 'ED' },
-        { name: '홍보', value: 'PR' },
+        { label: '회장', value: 'PD' },
+        { label: '부회장', value: 'VP' },
+        { label: '총무', value: 'TR' },
+        { label: '인사', value: 'HR' },
+        { label: '집행', value: 'ED' },
+        { label: '홍보', value: 'PR' },
     ]);
     const [tiers] = useState([
         { label: 1, value: 'S' },
@@ -33,47 +33,30 @@ const AdminManagement = () => {
         fetchData();
     }, []);
 
-    const mapAdminTypeName = (adminTypeName) => {
-        switch (adminTypeName) {
-            case 'PD':
-                return '회장';
-            case 'VP':
-                return '부회장';
-            case 'TR':
-                return '총무';
-            case 'HR':
-                return '인사';
-            case 'ED':
-                return '집행';
-            case 'PR':
-                return '홍보';
-            case 'SA':
-                return '시스템관리자';
-            default:
-                return adminTypeName;
-        }
-    };
-    
     const fetchData = async () => {
         try {
             const response = await axios.get('/api/admin/management/admin/getAll');
-            const transformedData = response.data.map(admin => ({
-                ...admin,
-                adminType: admin.adminType ? {
-                    ...admin.adminType,
-                    adminTypeName: mapAdminTypeName(admin.adminType.adminTypeName),
-                    value: admin.adminType.adminTypeName
-                } : {
-                    adminTypeName: "선택해주세요.",
-                    value: null
-                }
-            }));
+            const transformedData = response.data.map(admin => {
+                const adminStatus = statuses.find(status => status.value === admin.adminType.adminTypeName);
+                return {
+                    ...admin,
+                    adminType: adminStatus ? {
+                        adminTypeName: adminStatus.label,
+                        value: adminStatus.value
+                    } : {
+                        adminTypeName: "선택해주세요.",
+                        value: null
+                    }
+                };
+            });
+            console.log(transformedData);
             setProducts(transformedData);
         } catch (error) {
             console.error('Error fetching data: ', error);
             alert("문제가 발생했습니다. 관리자에게 문의해 주세요.");
         }
     };
+    
 
     const onRowEditComplete = async (e) => {
         let _products = [...products];
@@ -92,9 +75,9 @@ const AdminManagement = () => {
         try {
             await axios.put(`/api/admin/management/admin/updateInfo/${newData.adminId}`, adminData);
             _products[index] = newData;
-            setProducts(_products);
-            alert("정보가 업데이트되었습니다.");
+            //setProducts(_products);
             fetchData();
+            alert("정보가 업데이트되었습니다.");
         } catch (error) {
             alert("업데이트 실패했습니다.");
             fetchData();
@@ -115,7 +98,7 @@ const AdminManagement = () => {
                     options.rowData.adminType.value = e.value;
                 }} 
                 options={statuses} 
-                optionLabel="name" 
+                optionLabel="label" 
                 placeholder="선택해주세요" 
             />
         );

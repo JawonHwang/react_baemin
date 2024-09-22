@@ -55,7 +55,6 @@ const MembersManagement = () => {
             try {
                 await axios.put(`/api/admin/management/member/banCancel/${ member.memId }`);
                 alert("정지 취소되었습니다.");
-
                 fetchData();
             } catch (error) {
                 alert("정지 취소 실패했습니다. 다시 시도해주세요.");
@@ -82,8 +81,8 @@ const MembersManagement = () => {
             if (confirmGrant) {
                 try {
                     await axios.post(`/api/admin/management/member/grant-role/${ member.memId }`);
+                    
                     alert("관리자 부여 성공했습니다.\n상세설정은 관리자 관리 페이지에서 해주시길 바랍니다.");
-
                     fetchData();
                 } catch (error) {
                     alert("관리자 부여 실패했습니다.");
@@ -105,7 +104,7 @@ const MembersManagement = () => {
         try {
             await axios.put(`/api/admin/management/member/updateInfo/${newData.memId}`, member);
             _products[index] = newData;
-            setProducts(_products);
+            //setProducts(_products);
             alert("정보가 업데이트되었습니다.");
             fetchData();
         } catch (error) {
