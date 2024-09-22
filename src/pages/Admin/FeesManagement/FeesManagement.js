@@ -14,7 +14,7 @@ const FeesManagement = () => {
     const dt = useRef(null);
     const [products, setProducts] = useState([]);
     const [members, setMembers] = useState([]);
-    const [globalFilter, setGlobalFilter] = useState(''); // 초기값을 빈 문자열로 설정
+    const [globalFilter, setGlobalFilter] = useState(''); //검색필터
     const [payMethods] = useState([
         { id: 1, name: '계좌이체' },
         { id: 2, name: '현금' },
@@ -130,19 +130,24 @@ const FeesManagement = () => {
             <div>
                 <Export dt={dt} exportColumns={exportColumns} products={products} />
             </div>
-            <div>
-                <IconField iconPosition="left" style={{ maxWidth: '20rem' }}>
-                    <InputIcon className="pi pi-search" />
-                    <InputText type="search" onInput={handleGlobalFilterChange} placeholder="Search..." />
-                </IconField>
-            </div>
+            
         </div>
     );
-    
+    const search = (
+        <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
+            <IconField iconPosition="left" style={{ maxWidth: '20rem' }}>
+                <InputIcon className="pi pi-search" />
+                <InputText type="search" onInput={handleGlobalFilterChange} placeholder="Search..." />
+            </IconField>
+        </div>
+    )
 
     return (
         <div className={style.container}>
-            <div className={style.title}>회비 관리</div>
+            <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
+                <div className={style.title}>회비 관리</div>
+                {search}
+            </div>
             <hr />
             <div className="card p-fluid">
                 <DataTable

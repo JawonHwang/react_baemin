@@ -103,6 +103,14 @@ const AttendancesManagement = () => {
             />
         );
     };
+    const search = (
+        <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
+            <IconField iconPosition="left" style={{ maxWidth: '20rem' }}>
+                <InputIcon className="pi pi-search" />
+                <InputText type="search" onInput={handleGlobalFilterChange} placeholder="Search..." />
+            </IconField>
+        </div>
+    )
 
     const tableHeader = (
         <div className="flex flex-wrap gap-2 align-items-center justify-content-between mb-3">
@@ -127,19 +135,15 @@ const AttendancesManagement = () => {
                     onClick={handleAddColumn} // 버튼 클릭 시 열 추가
                 />
             </div>
-            <div>
-                <IconField iconPosition="left" style={{ maxWidth: '20rem' }}>
-                    <InputIcon className="pi pi-search" />
-                    <InputText type="search" onInput={handleGlobalFilterChange} placeholder="Search..." />
-                </IconField>
-            </div>
         </div>
     );
 
     return (
         <div className={style.container}>
-            <div className={style.title}>출석률 관리</div>
-            
+            <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
+                <div className={style.title}>출석률 관리</div>
+                {search}
+            </div>
             <hr />
             <div className="card p-fluid">
                 <DataTable
