@@ -103,7 +103,7 @@ const TournamentsAdd = () => {
                                     />*/}
                                     <InputText placeholder="대회명을 입력해주세요." value={dialogValue} onChange={(e) => setDialogValue(e.target.value)} style={{width:'100%'}}/>
                                     <div className={`${style.calendar}`}>
-                                        <Calendar  value={dates} onChange={(e) => setDates(e.value)} selectionMode="range" readOnlyInput hideOnRangeSelection dateFormat="yy/mm/dd" showIcon showButtonBar />
+                                        <Calendar  value={dates} onChange={(e) => setDates(e.value)} selectionMode="range" readOnlyInput hideOnRangeSelection dateFormat="yy-mm-dd" showIcon showButtonBar />
                                     </div>
                                 </div>
                                 
