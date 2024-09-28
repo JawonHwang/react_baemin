@@ -20,11 +20,11 @@ const AttendancesManagement = () => {
         { field: 'memName', header: '이름' },
         { field: 'memContact', header: '연락처' }
     ]); 
-    const [selectOptions, setSelectOptions] = useState([
-        { label: '출석', value: '출석' },
-        { label: '결석', value: '결석' },
-        { label: '지각', value: '지각' },
-        { label: '조퇴', value: '조퇴' }
+    const [selectOptions] = useState([
+        { value: '출석' },
+        { value: '결석' },
+        { value: '지각' },
+        { value: '조퇴' }
     ]);
 
     // API 호출로 데이터 가져오기
@@ -67,6 +67,13 @@ const AttendancesManagement = () => {
     // 새로운 열 추가 함수
     const handleAddColumn = () => {
         const newField = currentDate; // 새 필드 이름
+        console.log(cols);
+        const isDateAlreadyAdded = cols.some(col => col.field === newField);
+
+        if (isDateAlreadyAdded) {
+            alert('해당 날짜는 이미 추가되었습니다.');
+            return;
+        }
         const newCol = {
             field: newField,
             header: currentDate,
@@ -95,7 +102,7 @@ const AttendancesManagement = () => {
                 value={rowData[field]} // 현재 셀의 값을 표시
                 options={selectOptions} // 옵션 데이터
                 onChange={(e) => onEditorValueChange(e.value)} // 값 변경 시 호출되는 함수
-                optionLabel="label" // 옵션의 레이블 필드
+                optionLabel="value" // 옵션의 레이블 필드
                 placeholder="선택해주세요." // 기본 placeholder 텍스트
                 className="w-full md:w-14rem" // 스타일 적용
                 checkmark // 체크마크 표시
