@@ -90,18 +90,31 @@ const AttendancesManagement = () => {
         setCols([...cols, newCol]);   // 새로운 열을 기존 열에 추가
     };
 
+    const handleDropdownChange = (value, rowIndex, field) => {
+        const updatedProducts = [...products];
+        updatedProducts[rowIndex][field] = value; // 선택한 값을 해당 셀에 반영
+        setProducts(updatedProducts); // 상태 업데이트
+        console.log(updatedProducts);
+        /*try {
+            await axios.put(`/api/admin/management/fee/updateInfo/${newData.feeId}`, fee);
+            _products[index] = newData;
+            alert("정보가 업데이트되었습니다.");
+            fetchData();
+        } catch (error) {
+            alert("업데이트 실패했습니다.");
+            fetchData();
+        }*/
+    };
+
     // 콤보박스 편집기 함수
     const selectEditor = (props) => {
-        const { rowData, field, onEditorValueChange } = props;
-        console.log(props);
+        const { rowIndex, field } = props;
 
-
-        console.log('field:', field);
         return (
             <Dropdown
-                value={rowData[field]} // 현재 셀의 값을 표시
+                value={products[rowIndex][field]} // 현재 셀의 값을 표시
                 options={selectOptions} // 옵션 데이터
-                onChange={(e) => onEditorValueChange(e.value)} // 값 변경 시 호출되는 함수
+                onChange={(e) => handleDropdownChange(e.value, rowIndex, field)} // 값 변경 시 호출되는 함수
                 optionLabel="value" // 옵션의 레이블 필드
                 placeholder="선택해주세요." // 기본 placeholder 텍스트
                 className="w-full md:w-14rem" // 스타일 적용
@@ -110,6 +123,7 @@ const AttendancesManagement = () => {
             />
         );
     };
+
     const search = (
         <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
             <IconField iconPosition="left" style={{ maxWidth: '20rem' }}>
@@ -117,7 +131,7 @@ const AttendancesManagement = () => {
                 <InputText type="search" onInput={handleGlobalFilterChange} placeholder="Search..." />
             </IconField>
         </div>
-    )
+    );
 
     const tableHeader = (
         <div className="flex flex-wrap gap-2 align-items-center justify-content-between mb-3">

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styles from "./TopNavigator.module.css";
 import { Container, Row, Col } from "reactstrap";
 import { Link } from "react-router-dom";
@@ -29,6 +29,23 @@ const TopNavigator = () => {
     const [registerDialogVisible, setRegisterDialogVisible] = useState(false);
 
     const { loginID, setLoginID } = useContext(LoginContext);
+
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false); //비회원 신청 폼 관리자가 부여함
+
+    useEffect(() => {
+        const buttonStatus = localStorage.getItem('isButtonDisabled');
+        console.log(buttonStatus);
+        if (buttonStatus === 'true') {
+            setIsButtonDisabled(true);
+        }
+    }, []);
+
+    const handleDisabledClick = (e) => {
+        if (isButtonDisabled) {
+            e.preventDefault(); // 링크 기본 동작을 막음
+            alert('지금은 신청기간이 아닙니다.');
+        }
+    };
 
     const handleLinkClick = (link) => {
         setActiveLink(link);
@@ -195,6 +212,12 @@ const TopNavigator = () => {
                         <Col>
                             <Link className={styles.linkurl} to={`/baemin/MyPage`}>
                                 <div>MY PAGE</div>
+                            </Link>
+                        </Col>
+                        <Col>
+                        {/* 비활성화된 경우에는 클릭 시 alert을 띄우고, 아니라면 Link로 이동 */}
+                            <Link className={styles.linkurl} to={`/baemin/Community`} onClick={handleDisabledClick}>
+                                <div>동아리 가입 신청</div>
                             </Link>
                         </Col>
                         {loginID ? (
