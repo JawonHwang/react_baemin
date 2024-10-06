@@ -15,6 +15,7 @@ import AdminManagement from './AdminManagement/AdminManagement';
 import NonMemberManagement from './NonMemberManagement/NonMemberManagement';
 import NoticesAdd from './NoticesManagement/NoticesAdd';
 import NoticesCategoryAdd from './NoticesManagement/NoticesCategoryAdd';
+import FeesDetail from './FeesManagement/FeesDetail';
 import 'primeicons/primeicons.css';
 const Admin = () => {
     return (
@@ -38,6 +39,7 @@ const Admin = () => {
                     <Route path="/toReportsManagement/*" element={<ReportsManagement />}></Route>
                     <Route path="/toAdminManagement/*" element={<AdminManagement />}></Route>
                     <Route path="/toNonMemberManagement/*" element={<NonMemberManagement />}></Route>
+                    <Route path="/toFeesDetail/*" element={<FeesDetail />}></Route>
                 </Routes>
             </div>
         </div >

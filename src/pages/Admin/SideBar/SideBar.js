@@ -57,7 +57,7 @@ const SideBar = () => {
             </div>
             <div className={style.menu}>
                 <Link className={`${style.link} ${location.pathname === '/baemin/admin/toAttendancesManagement' && style.selected}`} to="/baemin/admin/toAttendancesManagement">
-                    출석률 관리
+                    출석부 관리
                 </Link>
             </div>
         </div>

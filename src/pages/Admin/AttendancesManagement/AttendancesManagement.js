@@ -11,11 +11,20 @@ import { Dropdown } from 'primereact/dropdown';
 import Export from '../Export/Export';
 
 const AttendancesManagement = () => {
+    /*----날짜----*/ 
+    const today = new Date(); // 오늘 날짜
+    const currentYear = today.getFullYear(); // 오늘 연도
+    const currentMonth = String(today.getMonth() + 1).padStart(2, '0');// 오늘 월 (0부터 시작하므로 +1)
+    const currentYearMonth = `${currentYear}-${currentMonth}`; // 예: "2024-09"
+    const [year, setYear] = useState(currentYear); // 상태로 연도 관리
+    const [month, setMonth] = useState(currentMonth);
+    /*-----------*/
     const dt = useRef(null);
     const [products, setProducts] = useState([]); // 출석 데이터
     const [globalFilter, setGlobalFilter] = useState('');
     const [currentDate, setCurrentDate] = useState('');
     const [cols, setCols] = useState([ // 열을 상태로 관리
+        { field: 'memId', header: '아이디', hidden: true },
         { field: 'memStuId', header: '학번' },
         { field: 'memName', header: '이름' },
         { field: 'memContact', header: '연락처' }
@@ -27,25 +36,71 @@ const AttendancesManagement = () => {
         { value: '조퇴' }
     ]);
 
+    /*const fetchAttendanceData = async () => {
+        try {
+            const response = await axios.get('/api/admin/management/attendance/monthGetAll');
+            const data = response.data;
+
+            // 데이터에서 동적으로 열 이름 추출
+            const newColumns = Object.keys(data[0] || {}).map(key => ({
+                field: key,
+                header: key.charAt(0).toUpperCase() + key.slice(1),
+                width: 150
+            }));
+
+            setCols(prevCols => [...prevCols, ...newColumns]); // 새로운 열 추가
+            setProducts(data); // 출석 데이터 설정
+        } catch (error) {
+            console.error('출석 데이터 가져오기 오류: ', error);
+            alert("문제가 발생했습니다. 관리자에게 문의해 주세요.");
+        }
+    };*/
+    
     // API 호출로 데이터 가져오기
     const fetchData = async () => {
         try {
-            const response = await axios.get('/api/admin/management/member/getAll');
+            const response = await axios.get('/api/admin/management/common/getMemberbyIsBan');
             const data = response.data;
-    
-            // 학번의 앞 두 자리만 추출하여 새로운 필드를 추가
-            /*const updatedData = data.map(item => ({
-                ...item,
-                memStuIdShort: item.memStuId ? `${item.memStuId.substring(0, 2)}학번` : '' // 학번의 앞 두 자리
-            }));
-            console.log(updatedData);
-            setProducts(updatedData);*/
             setProducts(data);
         } catch (error) {
             console.error('Error fetching data: ', error);
             alert("문제가 발생했습니다. 관리자에게 문의해 주세요.");
         }
+        
     };
+    /*const fetchData = async () => {
+        try {
+            // 1. 회원 데이터 가져오기
+            const memberResponse = await axios.get('/api/admin/management/common/getMemberbyIsBan');
+            const memberData = memberResponse.data;
+    
+            // 2. 출석 데이터 가져오기
+            const attendanceResponse = await axios.get(`/api/admin/management/attendance/monthGetAll`, {
+                params: { year, month } // 연도와 월을 쿼리 파라미터로 전달
+            });
+            console.log(attendanceResponse);
+            const attendanceData = attendanceResponse.data;
+    
+            // 3. 출석 데이터와 회원 데이터를 memId를 기준으로 결합
+            const combinedData = memberData.map(member => {
+                // 출석 데이터에서 해당 멤버의 출석 정보를 찾아오기
+                const attendanceRecord = attendanceData.find(att => att.memId === member.memId);
+                
+                // 출석 데이터가 존재하는 경우 출석 정보 추가, 없으면 기본값으로 설정
+                return {
+                    ...member,
+                    attendance: attendanceRecord || {} // 출석 기록이 없을 경우 빈 객체로 설정
+                };
+            });
+    
+            // 4. 상태 업데이트
+            setProducts(combinedData);
+        } catch (error) {
+            console.error('Error fetching data: ', error);
+            alert("문제가 발생했습니다. 관리자에게 문의해 주세요.");
+        }
+    };*/
+    
 
     useEffect(() => {
         fetchData();
@@ -62,6 +117,25 @@ const AttendancesManagement = () => {
     const handleGlobalFilterChange = (e) => {
         const value = e.target.value;
         setGlobalFilter(value); 
+    };
+
+    // 다음 달로 이동하는 함수
+    const goToNextMonth = () => {
+        if (month === '12') {
+            setYear(year + 1);
+            setMonth('01');
+        } else {
+            setMonth(String(parseInt(month) + 1).padStart(2, '0'));
+        }
+    };
+    
+    const goToPreviousMonth = () => {
+        if (month === '01') {
+            setYear(year - 1);
+            setMonth('12');
+        } else {
+            setMonth(String(parseInt(month) - 1).padStart(2, '0'));
+        }
     };
 
     // 새로운 열 추가 함수
@@ -94,17 +168,52 @@ const AttendancesManagement = () => {
         const updatedProducts = [...products];
         updatedProducts[rowIndex][field] = value; // 선택한 값을 해당 셀에 반영
         setProducts(updatedProducts); // 상태 업데이트
-        console.log(updatedProducts);
-        /*try {
-            await axios.put(`/api/admin/management/fee/updateInfo/${newData.feeId}`, fee);
-            _products[index] = newData;
-            alert("정보가 업데이트되었습니다.");
-            fetchData();
-        } catch (error) {
-            alert("업데이트 실패했습니다.");
-            fetchData();
-        }*/
     };
+
+    const saveAllAttendance = async () => {
+    const attendanceData = [];
+
+    products.forEach(product => {
+        // 'memId', 'memStuId', 'memName', 'memContact' 필드를 제외한 나머지 필드를 순회
+        cols.forEach(col => {
+            if (!['memId', 'memStuId', 'memName', 'memContact'].includes(col.field)) {
+
+                const attendanceState = product[col.field];
+                console.log(`Member ID: ${product.memId}`);
+                console.log(`Date Field: ${col.field}`);
+                console.log(`Attendance State: ${attendanceState}`);
+
+                // 출석 상태가 존재할 때만 데이터를 전송
+                if (attendanceState) {
+                    // col.field를 날짜 형식으로 변환
+                    const formattedDate = new Date(col.field).toISOString().slice(0, 10); // 'YYYY-MM-DD' 형식으로 변환
+                    console.log("formattedDate" + formattedDate);
+
+                    attendanceData.push({
+                        member: {
+                            memId: product.memId // 멤버의 ID
+                        },
+                        attAt: formattedDate, // 필드를 날짜 형식으로 전송
+                        attState: attendanceState // 해당 날짜에 대한 출석 상태
+                    });
+                }
+            }
+        });
+    });
+
+    try {
+        const response = await axios.post('/api/admin/management/attendance/saveAll', attendanceData);
+        if (response.status === 200) {
+            alert('모든 출석 정보가 저장되었습니다.');
+        }
+    } catch (error) {
+        console.error('Error saving attendance:', error);
+        alert("출석 정보 저장 중 문제가 발생했습니다.");
+    }
+};
+
+    
+    
 
     // 콤보박스 편집기 함수
     const selectEditor = (props) => {
@@ -130,14 +239,20 @@ const AttendancesManagement = () => {
                 <InputIcon className="pi pi-search" />
                 <InputText type="search" onInput={handleGlobalFilterChange} placeholder="Search..." />
             </IconField>
+            <Button 
+                    type="button" 
+                    className={style.radius50} 
+                    icon="pi pi-save" 
+                    rounded 
+                    severity="info" 
+                    onClick={saveAllAttendance} // 저장 버튼 클릭 시 호출
+                />
         </div>
+        
     );
 
     const tableHeader = (
         <div className="flex flex-wrap gap-2 align-items-center justify-content-between mb-3">
-            <div>
-                <Export dt={dt} exportColumns={cols.map(col => ({ title: col.header, dataKey: col.field }))} products={products} />
-            </div>
             <div>
                 <label htmlFor="dateInput">오늘 날짜 추가: </label>
                 <input 
@@ -153,8 +268,19 @@ const AttendancesManagement = () => {
                     rounded 
                     outlined 
                     severity="info" 
-                    onClick={handleAddColumn} // 버튼 클릭 시 열 추가
+                    onClick={handleAddColumn}
                 />
+                
+            </div>
+            <div className="flex flex-wrap gap-5 align-items-center justify-content-center" style={{ flex: 1 }}>
+                <Button icon="pi pi-arrow-left" onClick={goToPreviousMonth} />
+                <div style={{fontSize:"1.5rem"}}>{year}년 {month}월</div>
+                {!(year === currentYear && month === currentMonth) && (
+                    <Button icon="pi pi-arrow-right" onClick={goToNextMonth} />
+                )}
+            </div>
+            <div>
+                <Export dt={dt} exportColumns={cols.map(col => ({ title: col.header, dataKey: col.field }))} products={products} />
             </div>
         </div>
     );
@@ -162,7 +288,7 @@ const AttendancesManagement = () => {
     return (
         <div className={style.container}>
             <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
-                <div className={style.title}>출석률 관리</div>
+                <div className={style.title}>출석부 관리</div>
                 {search}
             </div>
             <hr />
@@ -179,14 +305,14 @@ const AttendancesManagement = () => {
                     header={tableHeader}
                     //size={'small'}
                 >
-                    {cols.map(({ field, header, editor }) => (
+                    {cols.map(({ field, header, editor, hidden }) => (
                         <Column
                             key={field}
                             field={field}
                             header={header}
                             sortable
                             editor={editor === 'select' ? selectEditor : undefined} // editor 속성에 selectEditor 함수 사용
-                            //body={field === 'memStuId' ? (rowData) => rowData.memStuIdShort : undefined} // 학번 두자리로 만들고 싶을 때
+                            hidden={hidden}
                         />
                     ))}
                 </DataTable>
