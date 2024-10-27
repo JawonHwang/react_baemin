@@ -61,6 +61,7 @@ const AttendancesManagement = () => {
                 params: { year: fetchYear, month: fetchMonth }
             });
             const attendanceData = attendanceResponse.data;
+            console.log(attendanceData);
 
             // 출석 데이터를 날짜와 memId로 중복 제거
             const attendanceMap = new Map();
