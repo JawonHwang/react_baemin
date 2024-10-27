@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { DataTable } from 'primereact/datatable';
+import { useNavigate } from 'react-router-dom';
 import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
@@ -28,7 +29,9 @@ const FeesDetail = () => {
 
     //행 추가
     const [isAddingNewRow, setIsAddingNewRow] = useState(false);
-    const [newProduct, setNewProduct] = useState({}); 
+    const [newProduct, setNewProduct] = useState({ admin: { adminId: null } }); // 초기값 설정
+
+    const navigate = useNavigate();
     /*const [payMethods] = useState([
         { name: '계좌이체' },
         { name: '현금' },
@@ -92,7 +95,7 @@ const FeesDetail = () => {
                     adminId: newData.admin.adminId
                 }
         };
-    
+        console.log(fee);
         try {
             await axios.put(`/api/admin/management/fee/updateInfo/${newData.feeId}`, fee);
             _products[index] = newData;
@@ -221,7 +224,7 @@ const FeesDetail = () => {
         { field: 'admin.adminId', header: '등록자' },
         { field: 'creAt', header: '등록일', body: (rowData) => formatDate(rowData.creAt) },
         { field: 'admin.adminId', header: '수정자' },
-        { field: 'uptAt', header: '수정일', body: (rowData) => formatDate(rowData.creAt) }
+        { field: 'uptAt', header: '수정일', body: (rowData) => formatDate(rowData.uptAt) } // 수정일에 올바른 필드 사용
     ];
 
     // 다음 달로 이동하는 함수
@@ -244,8 +247,7 @@ const FeesDetail = () => {
     };
     
 
-    const exportColumns = cols
-    .map(col => ({ title: col.header, dataKey: col.field }));
+    const exportColumns = cols.map(col => ({ title: col.header, dataKey: col.field }));
 
     const tableHeader = (
         <div className="flex flex-wrap gap-2 align-items-center justify-content-between mb-3">
@@ -269,49 +271,57 @@ const FeesDetail = () => {
         </div>
 
     );
+    const handleListClick = () => {
+        navigate('/baemin/admin/toFeesManagement');
+    };
     const search = (
         <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
             <IconField iconPosition="left" style={{ maxWidth: '20rem' }}>
                 <InputIcon className="pi pi-search" />
                 <InputText type="search" onInput={handleGlobalFilterChange} placeholder="Search..." />
             </IconField>
+            <Button onClick={handleListClick} rounded outlined severity="info">
+                <i className="pi pi-list" style={{ fontSize: '0.9rem' }}></i>
+            </Button>
         </div>
     )
+   
 
     return (
         <div className={style.container}>
             <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
                 <div className={style.title}>회비 세부사항 관리</div>
                 {search}
+                
             </div>
             <hr />
             <div className="card p-fluid">
-                <DataTable
-                    value={products}
-                    editMode="row"
-                    onRowEditComplete={onRowEditComplete}
-                    tableStyle={{ minWidth: '50rem' }}
-                    dataKey="feeId"
-                    paginator
-                    rows={10}
-                    size={'small'}
-                    rowsPerPageOptions={[5, 10, 25]}
-                    globalFilter={globalFilter}
-                    header={tableHeader}
-                >
-                    {cols.map(({ field, header, editor, body }) => (
-                        <Column
-                            key={field}
-                            field={field}
-                            header={header}
-                            editor={editor}
-                            body={body}
-                            sortable
-                            style={field === 'feeId' ? { display: 'none' } : {}}
-                        />
-                    ))}
-                    <Column rowEditor headerStyle={{ width: '3%', minWidth: '5rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
-                </DataTable>
+            <DataTable
+                value={products}
+                editMode="row"
+                onRowEditComplete={onRowEditComplete}
+                tableStyle={{ minWidth: '50rem' }}
+                dataKey="feeDetailId" // 고유한 키를 지정
+                paginator
+                rows={10}
+                size={'small'}
+                rowsPerPageOptions={[5, 10, 25]}
+                globalFilter={globalFilter}
+                header={tableHeader}
+            >
+                {cols.map(({ field, header, editor, body }) => (
+                    <Column
+                        key={`${field}-${header}`} // 고유한 키 조합으로 설정
+                        field={field}
+                        header={header}
+                        editor={editor}
+                        body={body}
+                        sortable
+                        style={field === 'feeId' ? { display: 'none' } : {}}
+                    />
+                ))}
+                <Column rowEditor headerStyle={{ width: '3%', minWidth: '5rem' }} bodyStyle={{ textAlign: 'center' }} />
+            </DataTable>
             </div>
         </div>
     );

@@ -22,6 +22,7 @@ const FeesManagement = () => {
     const currentYearMonth = `${currentYear}-${currentMonth}`; // 예: "2024-09"
     const [year, setYear] = useState(currentYear); // 상태로 연도 관리
     const [month, setMonth] = useState(currentMonth);
+    
     /*-----------*/
     const dt = useRef(null);
     const [products, setProducts] = useState([]);
@@ -56,6 +57,7 @@ const FeesManagement = () => {
                 ...product,
                 shortFall: product.monthlyFee - product.amount,
             }));
+            console.log(updatedProducts);
             setProducts(updatedProducts);
         } catch (error) {
             console.error('데이터를 불러오는데 문제가 발생했습니다.', error);
@@ -75,7 +77,6 @@ const FeesManagement = () => {
     const onRowEditComplete = async (e) => {
         let _products = [...products];
         let { newData, index } = e;
-        console.log(newData.admin.adminId);
         const fee = {
                 monthlyFee: newData.monthlyFee,
                 amount: newData.amount,
@@ -83,9 +84,6 @@ const FeesManagement = () => {
                 isPaid: newData.isPaid,
                 payDate: newData.payDate,
                 remarks: newData.remarks,
-                admin: {
-                    adminId: newData.admin.adminId
-                }
         };
     
         try {
@@ -226,6 +224,7 @@ const FeesManagement = () => {
                 <InputIcon className="pi pi-search" />
                 <InputText type="search" onInput={handleGlobalFilterChange} placeholder="Search..." />
             </IconField>
+            <Link to="/baemin/admin/toFeesDetail"><Button icon="pi pi-cog">세부설정</Button></Link>
         </div>
     )
 
@@ -233,7 +232,6 @@ const FeesManagement = () => {
         <div className={style.container}>
             <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
                 <div className={style.title}>회비 관리</div>
-                <Link to="/baemin/admin/toFeesDetail"><Button icon="pi pi-arrow-right">세부사항</Button></Link>
                 {search}
             </div>
             <hr />
