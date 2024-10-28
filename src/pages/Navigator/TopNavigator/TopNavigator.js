@@ -216,7 +216,7 @@ const TopNavigator = () => {
                         </Col>
                         <Col>
                         {/* 비활성화된 경우에는 클릭 시 alert을 띄우고, 아니라면 Link로 이동 */}
-                            <Link className={styles.linkurl} to={`/baemin/Community`} onClick={handleDisabledClick}>
+                            <Link className={styles.linkurl} to={`/baemin/join`} onClick={handleDisabledClick}>
                                 <div>동아리 가입 신청</div>
                             </Link>
                         </Col>

@@ -4,6 +4,7 @@ import { Container } from "reactstrap";
 import TopNavigator from "../Navigator/TopNavigator/TopNavigator";
 import Main from "../Main/Main";
 import Admin from "../Admin/Admin";
+import Join from "../JoinClub/Join";
 
 const Baemin = () => {
 
@@ -21,6 +22,7 @@ const Baemin = () => {
                         <Calendar />
                     } />
                     <Route path="/Admin/*" element={<Admin />} />
+                    <Route path="join/*" element={<Join />} />
                 </Routes>
 
             </div>
