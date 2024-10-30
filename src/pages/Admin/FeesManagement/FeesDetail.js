@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { DataTable } from 'primereact/datatable';
+import { useNavigate } from 'react-router-dom';
 import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
@@ -14,7 +14,7 @@ import Export from '../Export/Export';
 import { Calendar } from 'primereact/calendar';
 import { addLocale } from 'primereact/api';
 
-const FeesManagement = () => {
+const FeesDetail = () => {
     /*----날짜----*/ 
     const today = new Date(); // 오늘 날짜
     const currentYear = today.getFullYear(); // 오늘 연도
@@ -22,12 +22,17 @@ const FeesManagement = () => {
     const currentYearMonth = `${currentYear}-${currentMonth}`; // 예: "2024-09"
     const [year, setYear] = useState(currentYear); // 상태로 연도 관리
     const [month, setMonth] = useState(currentMonth);
-    
     /*-----------*/
     const dt = useRef(null);
     const [products, setProducts] = useState([]);
     const [globalFilter, setGlobalFilter] = useState(''); //검색필터
-    const [payMethods] = useState([
+
+    //행 추가
+    const [isAddingNewRow, setIsAddingNewRow] = useState(false);
+    const [newProduct, setNewProduct] = useState({ admin: { adminId: null } }); // 초기값 설정
+
+    const navigate = useNavigate();
+    /*const [payMethods] = useState([
         { name: '계좌이체' },
         { name: '현금' },
         { name: '카카오페이' },
@@ -41,7 +46,7 @@ const FeesManagement = () => {
         { name: '연체' },
         { name: '확인 중' },
         { name: '취소' }
-    ]);
+    ]);*/
     addLocale('ko', {
         chooseDate: '날짜 선택',
         today: '오늘',
@@ -52,13 +57,14 @@ const FeesManagement = () => {
     });
     const fetchData = async () => {
         try {
-            const response = await axios.get(`/api/admin/management/memberShipFee/getAll/${year}-${month}`);
-            const updatedProducts = response.data.map(product => ({
+            const response = await axios.get("/api/admin/management/feeDetail/getAll");
+            /*const updatedProducts = response.data.map(product => ({
                 ...product,
                 shortFall: product.monthlyFee - product.amount,
-            }));
-            console.log(updatedProducts);
-            setProducts(updatedProducts);
+            }));*/
+            //setProducts(updatedProducts);
+            console.log(response.data);
+            setProducts(response.data);
         } catch (error) {
             console.error('데이터를 불러오는데 문제가 발생했습니다.', error);
         }
@@ -77,6 +83,7 @@ const FeesManagement = () => {
     const onRowEditComplete = async (e) => {
         let _products = [...products];
         let { newData, index } = e;
+        console.log(newData.admin.adminId);
         const fee = {
                 monthlyFee: newData.monthlyFee,
                 amount: newData.amount,
@@ -84,8 +91,11 @@ const FeesManagement = () => {
                 isPaid: newData.isPaid,
                 payDate: newData.payDate,
                 remarks: newData.remarks,
+                admin: {
+                    adminId: newData.admin.adminId
+                }
         };
-    
+        console.log(fee);
         try {
             await axios.put(`/api/admin/management/fee/updateInfo/${newData.feeId}`, fee);
             _products[index] = newData;
@@ -116,7 +126,7 @@ const FeesManagement = () => {
         return status ? status.name : '미지정';
     };*/
 
-    const statusEditor = (options) => {
+    /*const statusEditor = (options) => {
         return (
             <Dropdown
                 value={payMethods.find(method => method.name === options.value)}
@@ -126,10 +136,10 @@ const FeesManagement = () => {
                 placeholder="선택해주세요."
             />
         );
-    };
+    };*/
 
     // 테이블에 paid 값을 name으로 보여주기 위한 템플릿
-    const confirmBodyTemplate = (rowData) => {
+    /*const confirmBodyTemplate = (rowData) => {
         const confirmStatus = confirms.find(confirm => confirm.id === rowData.paid);
         return confirmStatus ? confirmStatus.name : '상태 없음';
     };
@@ -144,7 +154,7 @@ const FeesManagement = () => {
                 placeholder="선택해주세요."
             />
         );
-    };
+    };*/
     
     const dateEditor = (options) => {
         return (
@@ -160,21 +170,61 @@ const FeesManagement = () => {
             />
         );
     };
+    const formatDate = (date) => {
+        if (!date) return '';
+        
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0'); // 0부터 시작하므로 +1
+        const day = String(d.getDate()).padStart(2, '0');
+    
+        return `${year}-${month}-${day}`;
+    };
+    // 새 행 추가
+    const handleAddNewRow = () => {
+        const today = new Date();
+        
+        // 새로운 제품 객체를 로컬 변수에 설정
+        const newProduct = {
+            feeDetailId: null,  // 새 행이기 때문에 ID는 null로 설정
+            ddate: null,        // 날짜 필드 초기화
+            content: '',
+            income: 0,
+            expend: 0,
+            totalMoney: 0,
+            admin: { adminId: null },
+            creAt: today,
+            uptAt: today
+        };
+    
+        // 새로운 행을 products 상태에 추가
+        setProducts(prevProducts => [...prevProducts, newProduct]);
+        setIsAddingNewRow(true);
+    };
+
+    // 새 행 저장
+    const handleSaveNewRow = async () => {
+        try {
+            await axios.post('/api/admin/management/feeDetail/create', newProduct);
+            fetchData(); // 서버에서 다시 데이터를 불러와서 새롭게 추가된 항목을 반영
+            setIsAddingNewRow(false);
+            alert('새로운 행이 추가되었습니다.');
+        } catch (error) {
+            alert('새 행을 추가하는데 실패했습니다.');
+        }
+    };
 
     const cols = [
-        { field: 'feeId', header: '번호', bodyStyle: { display: 'none' }, headerStyle: { display: 'none' } },
-        { field: 'member.memStuId', header: '학번' },
-        { field: 'member.memName', header: '회원 이름' },
-        { field: 'member.memContact', header: '연락처' },
-        { field: 'monthlyFee', header: '월 회비', editor: numberEditor, body: numberBodyTemplate },
-        { field: 'amount', header: '납부 금액', editor: numberEditor, body: numberBodyTemplate },
-        { field: 'shortFall', header: '부족액', body: (rowData) => rowData.shortFall },
-        { field: 'payMethod', header: '납부 방법', editor: statusEditor },
-        { field: 'isPaid', header: '납부 여부', editor: confirmEditor },
-        { field: 'payDate', header: '납부일', editor: dateEditor },
-        { field: 'remarks', header: '비고', editor: textEditor },
-        { field: 'admin.adminId', header: '수정자', editor: textEditor },
-        { field: 'uptAt', header: '수정일' }
+        { field: 'feeDetailId', header: '번호', bodyStyle: { display: 'none' }, headerStyle: { display: 'none' } },
+        { field: 'ddate', header: '날짜', editor: dateEditor },
+        { field: 'content', header: '내용', editor: textEditor },
+        { field: 'income', header: '수입', editor: numberEditor, body: numberBodyTemplate },
+        { field: 'expend', header: '지출', editor: numberEditor, body: numberBodyTemplate },
+        { field: 'totalMoney', header: '총금액', body: numberBodyTemplate },
+        { field: 'admin.adminId', header: '등록자' },
+        { field: 'creAt', header: '등록일', body: (rowData) => formatDate(rowData.creAt) },
+        { field: 'admin.adminId', header: '수정자' },
+        { field: 'uptAt', header: '수정일', body: (rowData) => formatDate(rowData.uptAt) } // 수정일에 올바른 필드 사용
     ];
 
     // 다음 달로 이동하는 함수
@@ -197,11 +247,14 @@ const FeesManagement = () => {
     };
     
 
-    const exportColumns = cols
-    .map(col => ({ title: col.header, dataKey: col.field }));
+    const exportColumns = cols.map(col => ({ title: col.header, dataKey: col.field }));
 
     const tableHeader = (
         <div className="flex flex-wrap gap-2 align-items-center justify-content-between mb-3">
+            <div>
+                <Button label="추가" icon="pi pi-plus" onClick={handleAddNewRow} />
+            </div>
+            
             {/* 첫 번째 div: 중앙에 배치 */}
             <div className="flex flex-wrap gap-5 align-items-center justify-content-center" style={{ flex: 1 }}>
                 <Button icon="pi pi-arrow-left" onClick={goToPreviousMonth} />
@@ -218,53 +271,60 @@ const FeesManagement = () => {
         </div>
 
     );
+    const handleListClick = () => {
+        navigate('/baemin/admin/toFeesManagement');
+    };
     const search = (
         <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
             <IconField iconPosition="left" style={{ maxWidth: '20rem' }}>
                 <InputIcon className="pi pi-search" />
                 <InputText type="search" onInput={handleGlobalFilterChange} placeholder="Search..." />
             </IconField>
-            <Link to="/baemin/admin/toFeesDetail"><Button icon="pi pi-cog">세부설정</Button></Link>
+            <Button onClick={handleListClick} rounded outlined severity="info">
+                <i className="pi pi-list" style={{ fontSize: '0.9rem' }}></i>
+            </Button>
         </div>
     )
+   
 
     return (
         <div className={style.container}>
             <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
-                <div className={style.title}>회비 관리</div>
+                <div className={style.title}>회비 세부사항 관리</div>
                 {search}
+                
             </div>
             <hr />
             <div className="card p-fluid">
-                <DataTable
-                    value={products}
-                    editMode="row"
-                    onRowEditComplete={onRowEditComplete}
-                    tableStyle={{ minWidth: '50rem' }}
-                    dataKey="feeId"
-                    paginator
-                    rows={10}
-                    size={'small'}
-                    rowsPerPageOptions={[5, 10, 25]}
-                    globalFilter={globalFilter}
-                    header={tableHeader}
-                >
-                    {cols.map(({ field, header, editor, body }) => (
-                        <Column
-                            key={field}
-                            field={field}
-                            header={header}
-                            editor={editor}
-                            body={body}
-                            sortable
-                            style={field === 'feeId' ? { display: 'none' } : {}}
-                        />
-                    ))}
-                    <Column rowEditor headerStyle={{ width: '3%', minWidth: '5rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
-                </DataTable>
+            <DataTable
+                value={products}
+                editMode="row"
+                onRowEditComplete={onRowEditComplete}
+                tableStyle={{ minWidth: '50rem' }}
+                dataKey="feeDetailId" // 고유한 키를 지정
+                paginator
+                rows={10}
+                size={'small'}
+                rowsPerPageOptions={[5, 10, 25]}
+                globalFilter={globalFilter}
+                header={tableHeader}
+            >
+                {cols.map(({ field, header, editor, body }) => (
+                    <Column
+                        key={`${field}-${header}`} // 고유한 키 조합으로 설정
+                        field={field}
+                        header={header}
+                        editor={editor}
+                        body={body}
+                        sortable
+                        style={field === 'feeId' ? { display: 'none' } : {}}
+                    />
+                ))}
+                <Column rowEditor headerStyle={{ width: '3%', minWidth: '5rem' }} bodyStyle={{ textAlign: 'center' }} />
+            </DataTable>
             </div>
         </div>
     );
-};
+}
 
-export default FeesManagement;
+export default FeesDetail;
