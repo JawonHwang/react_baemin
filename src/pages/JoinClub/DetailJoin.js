@@ -4,6 +4,7 @@ import axios from "axios";
 import { InputText } from "primereact/inputtext";
 import { Checkbox } from "primereact/checkbox";
 import { useParams } from "react-router-dom";
+import { Button } from "primereact/button";
 
 const DetailJoin = () => {
     const { joId } = useParams(); // URL에서 joId 추출
@@ -60,6 +61,37 @@ const DetailJoin = () => {
         fetchData();
         fetchDates();
     }, [joId]);
+
+    //관리자가 신청폼을 보고 승인 또는 반려
+    const handleApprove = () => {
+        const isConfirmed = window.confirm("정말로 승인하시겠습니까?");
+        if (isConfirmed) {
+            try {
+                axios.put(`/api/admin/management/nonMember/form/approve/${joId}`);
+                alert("승인 되었습니다.");
+            } catch (error) {
+                alert("승인 실패했습니다. 개발자에게 문의 바랍니다.");
+            }
+            } else {
+                // 사용자가 취소를 선택한 경우
+                alert("승인이 취소되었습니다.");
+            }
+    }
+    
+    const handleDisapprove = () => {
+        const isConfirmed = window.confirm("정말로 반려하시겠습니까?");
+        if (isConfirmed) {
+            try {
+                axios.put(`/api/admin/management/nonMember/form/disApprove/${joId}`);
+                alert("반려 되었습니다.");
+            } catch (error) {
+                alert("반려 실패했습니다. 개발자에게 문의 바랍니다.");
+            }
+            } else {
+                // 사용자가 취소를 선택한 경우
+                alert("반려 취소되었습니다.");
+            }
+    }
 
     return (
         <div className={styles.container}>
@@ -122,6 +154,10 @@ const DetailJoin = () => {
                 <div className="inline-flex flex-column gap-2">
                     <label>배드민턴 경험 및 실력</label>
                     <InputText value={joSkill} disabled placeholder="배드민턴을 쳐 본 경험이 있다면 기간, 혹은 얼만큼 치는지!" className="p-3" />
+                </div>
+                <div className="flex align-items-center gap-2">
+                    <Button label="승인" onClick={handleApprove} severity="info" />
+                    <Button label="반려" onClick={handleDisapprove} severity="danger" />
                 </div>
             </div>
         </div>
