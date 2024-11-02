@@ -60,7 +60,7 @@ const FeesDetail = () => {
             const response = await axios.get("/api/admin/management/feeDetail/getAll");
             /*const updatedProducts = response.data.map(product => ({
                 ...product,
-                shortFall: product.monthlyFee - product.amount,
+                totalMoney: product.income - product.expend,
             }));*/
             //setProducts(updatedProducts);
             console.log(response.data);
@@ -83,23 +83,42 @@ const FeesDetail = () => {
     const onRowEditComplete = async (e) => {
         let _products = [...products];
         let { newData, index } = e;
-        console.log(newData.admin.adminId);
-        const fee = {
-                monthlyFee: newData.monthlyFee,
-                amount: newData.amount,
-                payMethod: newData.payMethod,
-                isPaid: newData.isPaid,
-                payDate: newData.payDate,
-                remarks: newData.remarks,
-                admin: {
-                    adminId: newData.admin.adminId
-                }
+
+        if (newData.ddate == null) {
+            alert("날짜를 선택해주세요.");
+            return;
+        }
+        if (newData.content == null || newData.content.trim() === "") {
+            alert("내용을 입력해주세요.");
+            return;
+        }
+        if (newData.income == 0 && newData.expend == 0) {
+            alert("수입 또는 지출을 입력해주세요.");
+            return;
+        }
+
+        // 총금액 계산 로직
+        let previousTotal = index > 0 ? _products[index - 1].totalMoney : 0;
+        let calculatedTotal = previousTotal + (newData.income || 0) - (newData.expend || 0);
+        
+        const feeDatail = {
+            feeDetailId: newData.feeDetailId,
+            ddate: newData.ddate,
+            content: newData.content,
+            income: newData.income,
+            expend: newData.expend,
+            totalMoney: calculatedTotal,
         };
-        console.log(fee);
         try {
-            await axios.put(`/api/admin/management/fee/updateInfo/${newData.feeId}`, fee);
+            if (newData.feeDetailId == null) {
+                await axios.post('/api/admin/management/feeDetail/insert', feeDatail);
+                alert("정보가 등록되었습니다.");
+            } else {
+                await axios.put(`/api/admin/management/feeDetail/feeDetailInfo/${newData.feeDetailId}`, feeDatail);
+                alert("정보가 업데이트되었습니다.");
+            }
             _products[index] = newData;
-            alert("정보가 업데이트되었습니다.");
+    
             fetchData();
         } catch (error) {
             alert("업데이트 실패했습니다.");
@@ -180,9 +199,10 @@ const FeesDetail = () => {
     
         return `${year}-${month}-${day}`;
     };
+
+    
     // 새 행 추가
     const handleAddNewRow = () => {
-        const today = new Date();
         
         // 새로운 제품 객체를 로컬 변수에 설정
         const newProduct = {
@@ -193,8 +213,8 @@ const FeesDetail = () => {
             expend: 0,
             totalMoney: 0,
             admin: { adminId: null },
-            creAt: today,
-            uptAt: today
+            creAt: null,
+            uptAt: null
         };
     
         // 새로운 행을 products 상태에 추가
@@ -206,7 +226,7 @@ const FeesDetail = () => {
     const handleSaveNewRow = async () => {
         try {
             await axios.post('/api/admin/management/feeDetail/create', newProduct);
-            fetchData(); // 서버에서 다시 데이터를 불러와서 새롭게 추가된 항목을 반영
+            fetchData();
             setIsAddingNewRow(false);
             alert('새로운 행이 추가되었습니다.');
         } catch (error) {
@@ -221,10 +241,10 @@ const FeesDetail = () => {
         { field: 'income', header: '수입', editor: numberEditor, body: numberBodyTemplate },
         { field: 'expend', header: '지출', editor: numberEditor, body: numberBodyTemplate },
         { field: 'totalMoney', header: '총금액', body: numberBodyTemplate },
-        { field: 'admin.adminId', header: '등록자' },
-        { field: 'creAt', header: '등록일', body: (rowData) => formatDate(rowData.creAt) },
-        { field: 'admin.adminId', header: '수정자' },
-        { field: 'uptAt', header: '수정일', body: (rowData) => formatDate(rowData.uptAt) } // 수정일에 올바른 필드 사용
+        { field: 'creAdmin', header: '등록자' },
+        { field: 'creDate', header: '등록일', },
+        { field: 'uptAdmin', header: '수정자' },
+        { field: 'uptDate', header: '수정일', } // 수정일에 올바른 필드 사용
     ];
 
     // 다음 달로 이동하는 함수

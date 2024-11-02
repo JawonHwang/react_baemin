@@ -13,6 +13,8 @@ import style from "./FeesManagement.module.css";
 import Export from '../Export/Export';
 import { Calendar } from 'primereact/calendar';
 import { addLocale } from 'primereact/api';
+import { ColumnGroup } from 'primereact/columngroup';
+import { Row } from 'primereact/row';
 
 const FeesManagement = () => {
     /*----날짜----*/ 
@@ -228,6 +230,52 @@ const FeesManagement = () => {
         </div>
     )
 
+    const formatCurrency = (value) => {
+        return value.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' });
+    };
+
+    const MonthTotal = () => {
+        let total = 0;
+
+        products.forEach(product => {
+            total += product.monthlyFee || 0; // 값이 없으면 0으로 처리
+        });
+
+        return formatCurrency(total);
+    };
+
+
+    const paidTotal = () => {
+        let total = 0;
+
+        products.forEach(product => {
+            total += product.amount || 0; // 값이 없으면 0으로 처리
+        });
+
+        return formatCurrency(total);
+    };
+
+    const shortFallTotal = () => {
+        let total = 0;
+
+        products.forEach(product => {
+            total += product.shortFall || 0; // 값이 없으면 0으로 처리
+        });
+
+        return formatCurrency(total);
+    };
+    
+    const footerGroup = (
+        <ColumnGroup>
+            <Row>
+                <Column footer="Totals:" colSpan={3} footerStyle={{ textAlign: 'right' }} />
+                <Column footer={MonthTotal} />
+                <Column footer={paidTotal} />
+                <Column footer={shortFallTotal} />
+            </Row>
+        </ColumnGroup>
+    );
+
     return (
         <div className={style.container}>
             <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
@@ -248,6 +296,7 @@ const FeesManagement = () => {
                     rowsPerPageOptions={[5, 10, 25]}
                     globalFilter={globalFilter}
                     header={tableHeader}
+                    footerColumnGroup={footerGroup}
                 >
                     {cols.map(({ field, header, editor, body }) => (
                         <Column
