@@ -61,11 +61,13 @@ const NonMemberManagement = () => {
         { field: 'joGender', header: '성별' , style: { minWidth: '130px' }},
         { field: 'joDept', header: '학과' },
         { field: 'joStuId', header: '학번' },
-        { field: 'interview.ivDate', header: '면접 가능 날짜' },
-        { field: 'activityDate.adDate', header: '활동 참여 가능 요일' },
+        { field: 'joIvIds', header: '면접 가능 날짜' },
+        { field: 'joAdIds', header: '활동 참여 가능 요일' },
         { field: 'joSkill', header: '개인 기량' },
         { field: 'app', header: '승인여부' },
-        { field: 'clubNumId', header: '기수' },
+        { field: 'clubNumId.clubNumId', header: '기수', 
+            body: rowData => rowData.clubNumId && rowData.clubNumId.clubNumId ? rowData.clubNumId.clubNumId : null 
+        },
         { field: 'joApprDate', header: '신청날짜' }
     ];
 
@@ -84,7 +86,7 @@ const NonMemberManagement = () => {
             </div>
             <div >
                 <Button id="disableButton" onClick={disableButton}>
-                    {isButtonDisabled ? '활성화' : '비활성화'}
+                    {isButtonDisabled ? '폼 활성화' : '폼 비활성화'}
                 </Button>
             </div>
         </div>
