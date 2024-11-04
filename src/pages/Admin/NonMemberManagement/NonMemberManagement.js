@@ -45,6 +45,9 @@ const NonMemberManagement = () => {
 
     const col = [
         { field: 'joId', header: '순번' },
+        { field: 'clubNumId.clubNumId', header: '기수', 
+            body: rowData => rowData.clubNumId && rowData.clubNumId.clubNumId ? rowData.clubNumId.clubNumId : null 
+        },
         { 
             field: 'joName', 
             header: '이름',
@@ -65,9 +68,6 @@ const NonMemberManagement = () => {
         { field: 'joAdIds', header: '활동 참여 가능 요일' },
         { field: 'joSkill', header: '개인 기량' },
         { field: 'app', header: '승인여부' },
-        { field: 'clubNumId.clubNumId', header: '기수', 
-            body: rowData => rowData.clubNumId && rowData.clubNumId.clubNumId ? rowData.clubNumId.clubNumId : null 
-        },
         { field: 'joApprDate', header: '신청날짜' }
     ];
 

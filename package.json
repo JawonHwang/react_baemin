@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.3",
     "bootstrap": "^5.3.3",
+    "chart.js": "^4.4.6",
     "date-fns": "^2.30.0",
     "file-saver": "^2.0.5",
     "fullcalendar": "^6.1.15",
