@@ -5,7 +5,7 @@ const Photo = () => {
 
     return (
         <div className={styles.container}>
-
+            photo
         </div>
     );
 }

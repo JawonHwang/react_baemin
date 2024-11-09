@@ -1,0 +1,89 @@
+.buttons {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.buttons button {
+    margin: 5px;
+}
+
+.write {
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-top: 30px;
+    font-size: x-large;
+    font-weight: bold;
+}
+
+hr {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.title {
+    width: 84%;
+    margin-left: 67px;
+}
+
+.file {
+    margin-left: 30px;
+}
+
+.fileList {
+    display: flex;
+    align-items: center;
+}
+
+.select {
+    display: flex;
+    align-items: center;
+}
+
+.comFree {
+    margin-left: 30px;
+}
+
+.category {
+    width: 100px;
+    margin-left: 30px;
+    border: 1px solid black;
+}
+
+.margin {
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-top: 15px;
+}
+
+.editor {
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-top: 15px;
+    border: 1px solid black;
+    height: 370px;
+    margin: auto;
+    width: 80%;
+}
+
+.btn {
+    display: flex;
+    justify-content: flex-end;
+    margin: 25px;
+}
+
+.btn button {
+    margin: 5px;
+    width: 100px;
+    height: 40px;
+    border-radius: 7px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 15px;
+    position: relative;
+    z-index: 1;
+}
+
+.btn button:hover {
+    background-color: rgb(100, 180, 255);
+}
