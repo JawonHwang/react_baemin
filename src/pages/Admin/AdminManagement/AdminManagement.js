@@ -187,9 +187,9 @@ const AdminManagement = () => {
                 <div className={style.title}>관리자 관리</div>
                 {tableHeader}
             </div>
-            <hr></hr>
+            <hr className='w-full' style={{marginLeft:"0px",marginRight:"0px"}}></hr>
             <div className="card p-fluid">
-                <DataTable value={products}  editMode="row" dataKey="adminId" onRowEditComplete={onRowEditComplete} tableStyle={{ minWidth: '60rem' }} globalFilter={globalFilter} paginator rowsPerPageOptions={[5, 10, 25]} rows={10}>
+                <DataTable value={products}  editMode="row" dataKey="adminId" onRowEditComplete={onRowEditComplete} tableStyle={{ minWidth: '100rem' }} globalFilter={globalFilter} paginator rowsPerPageOptions={[5, 10, 25]} rows={10}>
                     {col.map(({ field, header, editor, style, body }) => {
                         return <Column key={field} field={field} header={header} editor={editor} body={body} style={style} sortable />;
                     })}

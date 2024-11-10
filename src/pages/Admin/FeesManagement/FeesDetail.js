@@ -314,13 +314,13 @@ const FeesDetail = () => {
                 {search}
                 
             </div>
-            <hr />
+            <hr className='w-full' style={{marginLeft:"0px",marginRight:"0px"}}></hr>
             <div className="card p-fluid">
             <DataTable
                 value={products}
                 editMode="row"
                 onRowEditComplete={onRowEditComplete}
-                tableStyle={{ minWidth: '50rem' }}
+                tableStyle={{ minWidth: '100rem' }}
                 dataKey="feeDetailId" // 고유한 키를 지정
                 paginator
                 rows={10}

@@ -55,7 +55,10 @@ const SideBar = () => {
                 </Link>
             </div>
             <div className={style.menu}>
-                <Link className={`${style.link} ${location.pathname === '/baemin/admin/toTournamentsManagement' && style.selected}`} to="/baemin/admin/toTournamentsManagement">
+                <Link className={`${style.link} ${location.pathname === '/baemin/admin/toTournamentsManagement' && style.selected}`} to="/baemin/admin/toFAQsManagement" onClick={(e) => {
+                    e.preventDefault();//나중에 서비스 준비되면 onclick 삭제
+                    alert("준비 중입니다.");
+                }}>
                     대회 관리
                 </Link>
             </div>
