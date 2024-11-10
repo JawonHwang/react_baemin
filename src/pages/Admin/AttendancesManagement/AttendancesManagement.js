@@ -336,12 +336,12 @@ const AttendancesManagement = () => {
                 <div className={style.title}>출석부 관리</div>
                 {search}
             </div>
-            <hr />
+            <hr className='w-full' style={{marginLeft:"0px",marginRight:"0px"}}></hr>
             <div className="card p-fluid">
                 <DataTable
                     value={products}
                     editMode="cell"
-                    tableStyle={{ minWidth: '50rem' }}
+                    tableStyle={{ minWidth: '100rem' }}
                     dataKey="memId"
                     paginator
                     rows={10}

@@ -190,10 +190,10 @@ const MembersManagement = () => {
                 <div className={style.title}>회원 관리</div>
                 {search}
             </div>
-            <hr></hr>
+            <hr className='w-full' style={{marginLeft:"0px",marginRight:"0px"}}></hr>
             <div className="card">
                 <div className={style.dataTableWrapper}>
-                    <DataTable editMode="row" onRowEditComplete={onRowEditComplete} ref={dt} value={products} header={tableHeader} paginator rowsPerPageOptions={[5, 10, 25]} rows={10} sortable globalFilter={globalFilter} tableStyle={{ minWidth: '100rem' }}>
+                    <DataTable editMode="row" onRowEditComplete={onRowEditComplete} size={'small'} ref={dt} value={products} header={tableHeader} paginator rowsPerPageOptions={[5, 10, 25]} rows={10} sortable globalFilter={globalFilter} tableStyle={{ minWidth: '100rem' }}>
                         {cols.map((col, index, editor, style) => (
                             <Column key={index} field={col.field} header={col.header} editor={col.editor} body={col.body} style={style} sortable  />
                         ))}

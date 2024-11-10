@@ -7,7 +7,7 @@ const QuestionsManagement = () => {
     return (
         <div className={style.container}>
             <div className={style.title}>Q&A 관리</div>
-            <hr></hr>
+            <hr className='w-full' style={{marginLeft:"0px",marginRight:"0px"}}></hr>
             
         </div>
     );

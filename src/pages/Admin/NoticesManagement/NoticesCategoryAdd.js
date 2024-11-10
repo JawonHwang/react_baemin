@@ -165,7 +165,7 @@ const NoticesCategoryAdd = () => {
                     </Button>
                 </div>
             </div>
-            <hr></hr>
+            <hr className='w-full' style={{marginLeft:"0px",marginRight:"0px"}}></hr>
             <div>
                 <div className={style.buttons}>
                     <Button onClick={handleSaveOrder} className={style.radius20} style={{ fontSize: '0.9rem' ,marginRight:'1.5%'}} rounded outlined severity="success">
