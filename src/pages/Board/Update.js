@@ -5,31 +5,25 @@ import axios from 'axios';
 import ReactQuill from './ReactQuill';
 
 function Update() {
-    const [board, setBoard] = useState({
-        seq: "",
-        title: "",
-        file: null, 
-        contents: "",
-        category: "",
-    });
+    const [board, setBoard] = useState({});
     const navi = useNavigate();
-    const { seq } = useParams();
+    const { boardId } = useParams();
 
     useEffect(() => {
-        axios.get(`/api/boards/update/${seq}`)
+        axios.get(`/api/board/contents/${boardId}`)
             .then((resp) => {
                 const boardData = resp.data;
                 setBoard({
-                    seq: boardData.seq,
-                    title: boardData.title,
-                    contents: boardData.contents,
-                    category: boardData.category,
+                    boardId: boardData.boardId,
+                    boardTitle: boardData.boardTitle,
+                    boardContents: boardData.boardContents,
                 });
+                console.log(boardData);
             })
             .catch((error) => {
                 console.error(error);
             });
-    }, [seq]);
+    }, [boardId]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -41,35 +35,37 @@ function Update() {
     };
 
     const handleCancel = () => {
-        navi(`/groovy/board/detail/${seq}`);
+        navi(`/baemin/community/detail/${boardId}`);
     };
 
     const handleUpdate = () => {
 
-        if (!board.title) {
+        if (!board.boardTitle) {
             alert("제목은 필수 입력 항목입니다.");
             return;
         }
 
-        if (!board.contents) {
+        if (!board.boardContents) {
             alert("내용은 필수 입력 항목입니다.");
-            return;
-        }
-        
-        if (!board.category) {
-            alert("카테고리는 필수 입력 항목입니다.");
             return;
         }
 
         const formData = new FormData();
-        formData.append('title', board.title);
-        formData.append('contents', board.contents);
-        formData.append('category', board.category);
-        formData.append('files', board.file);
+        formData.append('boardTitle', board.boardTitle);
+        formData.append('boardContents', board.boardContents);
 
-        axios.put(`/api/boards/update/${seq}`, formData, {})
+        // 파일이 있을 경우에만 추가
+        if (board.file) {
+            formData.append('files', board.file);
+        }
+
+        axios.put(`/api/board/update/${boardId}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
             .then((resp) => {
-                navi(`/groovy/board/detail/${seq}`);
+                navi(`/baemin/community/detail/${boardId}`);
             })
             .catch((e) => {
                 console.error(e);
@@ -82,29 +78,23 @@ function Update() {
             <hr></hr>
             <div className={style.margin}>
                 제목
-                <input type="text" placeholder="제목" name="title" onChange={handleChange} value={board.title} className={style.title} /><br />
+                <input type="text" placeholder="제목" name="boardTitle" onChange={handleChange} value={board.boardTitle} className={style.title} /><br />
                 <hr></hr>
-                파일 첨부
-                <input type="file" onChange={handleFileChange} className={style.file} />
-                <hr></hr>
-                카테고리
-                <select name="category" onChange={handleChange} value={board.category} className={style.category}>
-                    <option value="공지">공지</option>
-                    <option value="자유">자유</option>
-                </select>
+                {/* 파일 첨부
+                <input type="file" onChange={handleFileChange} className={style.file} /> */}
             </div>
             <hr></hr>
             <div className={style.editor}>
                 <ReactQuill
                     id="editor"
-                    value={board.contents}
-                    setValue={(value) => setBoard({ ...board, contents: value })}
+                    value={board.boardContents}
+                    setValue={(value) => setBoard({ ...board, boardContents: value })}
                 />
             </div>
 
             <div className={style.btn}>
                 <button onClick={handleUpdate}>수정</button>
-                <button onClick={handleCancel}>수정 취소</button>
+                <button onClick={handleCancel}>취소</button>
             </div>
         </div>
     );

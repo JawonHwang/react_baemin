@@ -1,4 +1,4 @@
-.boardcontainer {
+.photocontainer {
     font-family: 'Arial', sans-serif;
     min-width: 1200px;
 }
@@ -31,7 +31,7 @@ hr {
     margin-right: 30px;
 }
 
-.boardTable {
+.photoTable {
     width: 100%;
     border-collapse: collapse;
 }

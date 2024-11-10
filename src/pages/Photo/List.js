@@ -1,11 +1,9 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
-import { blue } from '@mui/material/colors';
-import InsertLinkIcon from '@mui/icons-material/InsertLink';
 import style from "./List.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
-import { Input } from "reactstrap";
+import { Input, Button } from "reactstrap";
 
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
@@ -20,19 +18,19 @@ const CircularIndeterminate = () => {
 const Free = () => {
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [boards, setBoards] = useState([]);
+    const [photos, setPhotos] = useState([]);
     const COUNT_PER_PAGE = 10;
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         setLoading(true);
-        axios.get("/api/boards/comfree").then(resp => {
-            setBoards(resp.data);
+        axios.get("/api/photo").then(resp => {
+            setPhotos(resp.data);
             setLoading(false);
         })
     }, []);
 
-    const totalItems = boards.length;
+    const totalItems = photos.length;
     const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
 
     const onPageChange = (e, page) => {
@@ -41,7 +39,7 @@ const Free = () => {
 
     const startIndex = (currentPage - 1) * COUNT_PER_PAGE;
     const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
-    const visibleBoard = boards.slice(startIndex, endIndex);
+    const visiblePhoto = photos.slice(startIndex, endIndex);
 
     const inputChangeHandler = (e) => {
         setSearch(e.target.value);
@@ -50,72 +48,59 @@ const Free = () => {
     if (loading) {
         return <CircularIndeterminate />;
     }
-    
+
     return (
-        <div className="Boardcontainer">
+        <div className="Photocontainer">
             <div className={style.search}>
                 <Input placeholder="검색" className={style.input_search} onChange={inputChangeHandler}></Input>
             </div>
             <hr></hr>
             <div className="body">
                 <div className={style.margin}>
-                    전사 자유 게시판
+                    Community - 포토
                 </div>
                 <hr></hr>
                 <div className={style.margin}>
-                    <div className={style.boardContainer}>
+                    <div className={style.photoContainer}>
                         <div className={style.tableRow + ' ' + style.tableHeader}>
                             <div className={style.tableHeader}>작성자</div>
-                            <div className={style.tableHeader}>파일</div>
                             <div className={style.tableHeader}>제목</div>
+                            <div className={style.tableHeader}>내용</div>
                             <div className={style.tableHeader}>조회수</div>
-                            <div className={style.tableHeader}>카테고리</div>
                             <div className={style.tableHeader}>작성일</div>
                         </div>
                         {search === ''
-                            ? visibleBoard.map((e) => (
-                                <div key={e.seq} className={style.tableRow}>
+                            ? visiblePhoto.map((e) => (
+                                <div key={e.photoId} className={style.tableRow}>
                                     <div className={style.tableCell}>
-                                        {e.name} {e.group_name} {e.position}
+                                        {e.photoWriter}
                                     </div>
                                     <div className={style.tableCell}>
-                                        {e.fseq !== 0 && (
-                                            <InsertLinkIcon sx={{ color: blue[200] }} />
-                                        )}
+                                        <Link to={`detail/${e.photoId}`}>{e.photoTitle}</Link>
                                     </div>
-                                    <div className={style.tableCell}>
-                                        <Link to={`/groovy/board/detail/${e.seq}`}>{e.title}</Link>
-                                    </div>
-                                    <div className={style.tableCell}>{e.view_count}</div>
-                                    <div className={style.tableCell}>{e.category}</div>
-                                    <div className={style.tableCell}>{e.write_date}</div>
+                                    <div className={style.tableCell}>{e.photoContents}</div>
+                                    <div className={style.tableCell}>{e.photoViewCount}</div>
+                                    <div className={style.tableCell}>{e.photoWriteDate}</div>
                                 </div>
                             ))
-                            : boards
+                            : photos
                                 .filter(
                                     (e) =>
-                                        e.name.includes(search) ||
-                                        (e.group_name && e.group_name.includes(search)) ||
-                                        e.position.includes(search) ||
-                                        e.contents.includes(search) ||
-                                        e.title.includes(search)
+                                        e.photoWriter.includes(search) ||
+                                        e.photoContents.includes(search) ||
+                                        e.photoTitle.includes(search)
                                 )
                                 .map((e) => (
-                                    <div key={e.seq} className={style.tableRow}>
+                                    <div key={e.photoId} className={style.tableRow}>
                                         <div className={style.tableCell}>
-                                            {e.name} {e.group_name} {e.position}
+                                            {e.photoWriter}
                                         </div>
                                         <div className={style.tableCell}>
-                                            {e.fseq !== 0 && (
-                                                <InsertLinkIcon sx={{ color: blue[200] }} />
-                                            )}
+                                            <Link to={`detail/${e.photoId}`}>{e.photoTitle}</Link>
                                         </div>
-                                        <div className={style.tableCell}>
-                                            <Link to={`/groovy/board/detail/${e.seq}`}>{e.title}</Link>
-                                        </div>
-                                        <div className={style.tableCell}>{e.view_count}</div>
-                                        <div className={style.tableCell}>{e.category}</div>
-                                        <div className={style.tableCell}>{e.write_date}</div>
+                                        <div className={style.tableCell}>{e.photoContents}</div>
+                                        <div className={style.tableCell}>{e.photoViewCount}</div>
+                                        <div className={style.tableCell}>{e.photoWriteDate}</div>
                                     </div>
                                 ))}
                     </div>
@@ -136,6 +121,11 @@ const Free = () => {
                             <PaginationItem {...item} sx={{ fontSize: 15 }} />
                         )}
                     />
+                </div>
+                <div className={style.writeButtonContainer}>
+                    <Link to="/baemin/community/write">
+                        <Button color="primary" className={style.writeButton}>글 작성</Button>
+                    </Link>
                 </div>
             </div>
         </div>

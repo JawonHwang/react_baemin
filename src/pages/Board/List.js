@@ -1,45 +1,34 @@
 import axios from 'axios';
-import React, { useState, useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { blue } from '@mui/material/colors';
-import InsertLinkIcon from '@mui/icons-material/InsertLink';
-import { Pagination, PaginationItem } from '@mui/material';
-import style from './List.module.css';
-import { Input } from "reactstrap";
-import { MemberContext } from '../Bm/Bm';
+import React, { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
+import style from "./List.module.css";
+import { Pagination, PaginationItem } from "@mui/material";
+import { Input, Button } from "reactstrap";
 
-const List = () => {
-    const { member } = useContext(MemberContext);
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
+const CircularIndeterminate = () => {
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+        </Box>
+    );
+};
+const Free = () => {
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [boards, setBoards] = useState([]);
     const COUNT_PER_PAGE = 10;
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const dept = member.group_name;
-        Promise.all([
-            axios.get('/api/boards/recent'),
-            axios.get(`/api/boards/recentDept/${dept}`),
-        ])
-            .then((responses) => {
-                const recentBoards = responses[0].data.map((board) => ({
-                    ...board,
-                    isRecentDept: 'recent',
-                }));
-                const deptBoards = responses[1].data.map((board) => ({
-                    ...board,
-                    isRecentDept: 'dept',
-                }));
-
-                const combinedBoards = [...recentBoards, ...deptBoards];
-                combinedBoards.sort(
-                    (a, b) => new Date(b.write_date) - new Date(a.write_date)
-                );
-                setBoards(combinedBoards);
-            })
-            .catch(() => { });
-    }, [member.group_name]);
+        setLoading(true);
+        axios.get("/api/board").then(resp => {
+            setBoards(resp.data);
+            setLoading(false);
+        })
+    }, []);
 
     const totalItems = boards.length;
     const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
@@ -52,117 +41,71 @@ const List = () => {
     const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
     const visibleBoard = boards.slice(startIndex, endIndex);
 
-    const getDetailLink = (seq, isRecentDept) => {
-        const basePath =
-            isRecentDept === 'recent'
-                ? '/groovy/board/detail'
-                : '/groovy/board/detailDept';
-        return `${basePath}/${seq}`;
-    };
-
     const inputChangeHandler = (e) => {
         setSearch(e.target.value);
     };
 
+    if (loading) {
+        return <CircularIndeterminate />;
+    }
+
     return (
-        <div className={style.boardContainer}>
+        <div className="Boardcontainer">
             <div className={style.search}>
                 <Input placeholder="검색" className={style.input_search} onChange={inputChangeHandler}></Input>
             </div>
-            <hr />
-            <div className={style.body}>
-                <div className={style.margin}>최근 게시물</div>
-                <hr />
+            <hr></hr>
+            <div className="body">
                 <div className={style.margin}>
-                    <div className={style.boardTable}>
-                        <div className={style.tableRow}>
+                    자유 게시판
+                </div>
+                <hr></hr>
+                <div className={style.margin}>
+                    <div className={style.boardContainer}>
+                        <div className={style.tableRow + ' ' + style.tableHeader}>
                             <div className={style.tableHeader}>작성자</div>
-                            <div className={style.tableHeader}>파일</div>
                             <div className={style.tableHeader}>제목</div>
+                            <div className={style.tableHeader}>내용</div>
                             <div className={style.tableHeader}>조회수</div>
-                            <div className={style.tableHeader}>카테고리</div>
                             <div className={style.tableHeader}>작성일</div>
                         </div>
                         {search === ''
                             ? visibleBoard.map((e) => (
-                                <div key={e.seq} className={style.tableRow}>
+                                <div key={e.boardId} className={style.tableRow}>
                                     <div className={style.tableCell}>
-                                        {e.name} {e.position}
+                                        {e.boardWriter}
                                     </div>
                                     <div className={style.tableCell}>
-                                        {e.fseq !== 0 && (
-                                            <InsertLinkIcon
-                                                sx={{ color: blue[200] }}
-                                            />
-                                        )}
+                                        <Link to={`detail/${e.boardId}`}>{e.boardTitle}</Link>
                                     </div>
-                                    <div className={style.tableCell}>
-                                        <Link
-                                            to={getDetailLink(
-                                                e.seq,
-                                                e.isRecentDept
-                                            )}
-                                        >
-                                            {e.title}
-                                        </Link>
-                                    </div>
-                                    <div className={style.tableCell}>
-                                        {e.view_count}
-                                    </div>
-                                    <div className={style.tableCell}>
-                                        {e.dept} {e.category}
-                                    </div>
-                                    <div className={style.tableCell}>
-                                        {e.write_date}
-                                    </div>
+                                    <div className={style.tableCell}>{e.boardContents}</div>
+                                    <div className={style.tableCell}>{e.boardViewCount}</div>
+                                    <div className={style.tableCell}>{e.boardWriteDate}</div>
                                 </div>
                             ))
                             : boards
                                 .filter(
                                     (e) =>
-                                        e.name.includes(search) ||
-                                        e.contents.includes(search) ||
-                                        e.title.includes(search)
+                                        e.boardWriter.includes(search) ||
+                                        e.boardContents.includes(search) ||
+                                        e.boardTitle.includes(search)
                                 )
                                 .map((e) => (
-                                    <div
-                                        key={e.seq}
-                                        className={style.tableRow}
-                                    >
+                                    <div key={e.boardId} className={style.tableRow}>
                                         <div className={style.tableCell}>
-                                            {e.name} {e.position}
+                                            {e.boardWriter}
                                         </div>
                                         <div className={style.tableCell}>
-                                            {e.fseq !== 0 && (
-                                                <InsertLinkIcon
-                                                    sx={{ color: blue[200] }}
-                                                />
-                                            )}
+                                            <Link to={`detail/${e.boardId}`}>{e.boardTitle}</Link>
                                         </div>
-                                        <div className={style.tableCell}>
-                                            <Link
-                                                to={getDetailLink(
-                                                    e.seq,
-                                                    e.isRecentDept
-                                                )}
-                                            >
-                                                {e.title}
-                                            </Link>
-                                        </div>
-                                        <div className={style.tableCell}>
-                                            {e.view_count}
-                                        </div>
-                                        <div className={style.tableCell}>
-                                            {e.dept} {e.category}
-                                        </div>
-                                        <div className={style.tableCell}>
-                                            {e.write_date}
-                                        </div>
+                                        <div className={style.tableCell}>{e.boardContents}</div>
+                                        <div className={style.tableCell}>{e.boardViewCount}</div>
+                                        <div className={style.tableCell}>{e.boardWriteDate}</div>
                                     </div>
                                 ))}
                     </div>
                 </div>
-                <hr />
+                <hr></hr>
                 <div className={style.margin}>
                     <Pagination
                         count={totalPages}
@@ -170,18 +113,23 @@ const List = () => {
                         onChange={onPageChange}
                         size="medium"
                         sx={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            padding: '15px 0',
+                            display: "flex",
+                            justifyContent: "center",
+                            padding: "15px 0",
                         }}
                         renderItem={(item) => (
                             <PaginationItem {...item} sx={{ fontSize: 15 }} />
                         )}
                     />
                 </div>
+                <div className={style.writeButtonContainer}>
+                    <Link to="/baemin/community/write">
+                        <Button color="primary" className={style.writeButton}>글 작성</Button>
+                    </Link>
+                </div>
             </div>
         </div>
     );
-};
+}
 
-export default List;
+export default Free;

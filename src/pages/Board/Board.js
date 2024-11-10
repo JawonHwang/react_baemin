@@ -5,7 +5,6 @@ import List from './List';
 import Write from './Write';
 import Update from './Update';
 import Detail from './Detail';
-import Free from './Free';
 import SideBar from './SideBar/SideBar';
 import style from "./Board.module.css";
 import 'primeicons/primeicons.css';
@@ -20,9 +19,8 @@ function Board() {
                 <Routes>
                     <Route path="/" element={<List />} />
                     <Route path="/write" element={<Write />} />
-                    <Route path="/update/:seq" element={<Update />} />
-                    <Route path="/detail/:seq" element={<Detail />} />
-                    <Route path="/free" element={<Free />} />
+                    <Route path="/update/:boardId" element={<Update />} />
+                    <Route path="/detail/:boardId" element={<Detail />} />
                 </Routes>
             </div>
         </div>
