@@ -9,7 +9,7 @@ const Community = () => {
         <div>
             <div className="MainContainer">
                 <Routes>
-                    <Route path="/" element={<Board />} />
+                    <Route path="/*" element={<Board />} />
                     <Route path="photo/*" element={<Photo />} />
                 </Routes>
             </div>
