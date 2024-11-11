@@ -59,6 +59,21 @@ const JoinClub = () => {
             : selectedIvId.filter(id => id !== e.value);
         setSelectedIvId(selected);
     };
+    //가입신청 수 통계 데이터
+    const increaseNewMemberCount = async () => {
+        try {
+          const response = await axios.get('/api/admin/todayNewMember');
+          if (response.data) {
+            // 해당 데이터의 가입신청 수 증가 요청 (PUT 요청)
+            await axios.put(`/api/admin/incrementNewMember/${response.data.id}`);
+          } else {
+            // 오늘 날짜의 데이터가 없는 경우 새로운 데이터 삽입 (POST 요청)
+            await axios.post('/api/admin/createNewMember');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };
 
     const handleRegister = () => {
         if (!phoneRegex.test(joContact)) {
@@ -92,6 +107,7 @@ const JoinClub = () => {
             },
         })
         .then(() => {
+            increaseNewMemberCount();
             alert("가입 신청이 성공적으로 완료되었습니다.");
             navigate("/baemin");  // 가입 성공 시 /baemin 페이지로 리다이렉트
         })
