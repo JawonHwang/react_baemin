@@ -1,0 +1,23 @@
+.list{
+  width: auto;
+  position: fixed;
+}
+
+.link {
+  text-decoration: none;
+  font-weight: bolder;
+  color: inherit;
+}
+
+.menu{
+    width: 100%;
+    margin-bottom: 30%;
+    color: white;
+}
+
+.menu:hover{
+  background-color: white;
+  color: black;
+  padding: 3%;
+  cursor: pointer;
+}

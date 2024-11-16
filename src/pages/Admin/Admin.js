@@ -34,6 +34,7 @@ const Admin = () => {
                     <Route path="/toFeesManagement/*" element={<FeesManagement />}></Route>
                     <Route path="/toNoticesManagement/*" element={<NoticesManagement />}></Route>
                     <Route path="/toNoticesAdd/*" element={<NoticesAdd />}></Route>
+                    <Route path="/toNoticesAdd/:notId" element={<NoticesAdd />}></Route>
                     <Route path="/toNoticesCategoryAdd/*" element={<NoticesCategoryAdd />}></Route>
                     <Route path="/toQuestionsManagement/*" element={<QuestionsManagement />}></Route>
                     <Route path="/toReportsManagement/*" element={<ReportsManagement />}></Route>

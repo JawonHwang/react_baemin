@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams  } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import style from "../Common.module.css";
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
@@ -13,6 +13,7 @@ const NoticesAdd = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);//분류
     const [category, setCategory] = useState([]);//카테고리
     const { notId } = useParams(); // URL에서 notId 추출
+    const [isEditMode, setIsEditMode] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -34,8 +35,15 @@ const NoticesAdd = () => {
 
                 // 불러온 데이터로 상태 초기화
                 setTitle(data.title || '');
-                //setContent(data.content || '');
-                setSelectedCategory(data.tag || null);
+                setContent(data.content || '');
+                setSelectedCategory(
+                    data.tag 
+                        ? { code: data.tag.notTagId, name: data.tag.notTagName } 
+                        : null
+                );
+                setIsEditMode(true); // 수정 모드로 설정
+            } else {
+                setIsEditMode(false); // 새 등록 모드
             }
         } catch (error) {
             console.error('데이터 가져오기 실패:', error);
@@ -55,20 +63,40 @@ const NoticesAdd = () => {
             content: content,
         };
 
-        // 서버에 데이터 전송
-        axios.post('/api/admin/management/notice/add', data)
+        if (isEditMode) {
+            axios.put(`/api/admin/management/notice/update/${notId}`, data)
+                .then(response => {
+                    alert('수정 성공!');
+                    navigate('/baemin/admin/toNoticesManagement');
+                })
+                .catch(error => {
+                    console.error("수정 실패:", error);
+                    alert('수정 실패!');
+                });
+        } else {
+            axios.post('/api/admin/management/notice/add', data)
+                .then(response => {
+                    alert('등록 성공!');
+                    navigate('/baemin/admin/toNoticesManagement');
+                })
+                .catch(error => {
+                    console.error("등록 실패:", error);
+                    alert('등록 실패!');
+                });
+        }
+    };
+    
+    const handleDelete = () => {
+        axios.delete(`/api/admin/management/notice/delete/${notId}`)
             .then(response => {
-                alert('등록 성공!');
-                // 성공 시 리스트로 이동 또는 상태 초기화
+                alert('삭제 성공!');
                 navigate('/baemin/admin/toNoticesManagement');
             })
             .catch(error => {
-                console.error("등록 실패:", error);
-                alert('등록 실패!');
+                console.error("삭제 실패:", error);
+                alert('삭제 실패!');
             });
     };
-    
-    
 
     return (
         <div className={style.container}>
@@ -84,8 +112,13 @@ const NoticesAdd = () => {
             <div>
                 <div className={style.buttons}>
                     <Button onClick={handleSubmit} className={style.radius20} style={{ fontSize: '0.9rem' }} rounded outlined severity="info">
-                        등록
+                        {isEditMode ? '수정' : '등록'}
                     </Button>
+                    {isEditMode && (
+                        <Button onClick={handleDelete} className={style.radius20} style={{ fontSize: '0.9rem' }} rounded outlined severity="danger">
+                            삭제
+                        </Button>
+                    )}
                 </div>
 
                 <div className={style.contents}>
