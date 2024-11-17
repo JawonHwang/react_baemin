@@ -1,0 +1,212 @@
+.Calendar {
+    width: 100%;
+    position: relative;
+    top: 50px;
+}
+
+.MyCalendar {
+    width: 100%;
+    position: relative;
+    top: 60px;
+    font-weight: 550 !important;
+    font-size: 17px;
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal {
+    background: white;
+    padding: 30px;
+    width: 500px;
+}
+
+.scheduleTitle {
+    font-size: 17px;
+    margin-bottom: 20px;
+    color: rgb(0, 20, 255);
+}
+
+.ModalBody {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.ModalBody ul {
+    list-style: none;
+    padding: 0px;
+    margin-left: 10px;
+}
+
+.ModalBody ul li {
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.ModalBody ul li span {
+    width: 25%;
+    font-size: 15px;
+    float: left;
+    display: flex;
+    align-items: center;
+}
+
+.ModalBody ul li .select {
+    width: 75%;
+    height: 25px;
+    float: left;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.select select {
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.ModalBody ul li .input {
+    width: 75%;
+    height: 25px;
+    float: left;
+}
+
+.ModalBody ul li .input input {
+    padding: 1px;
+    padding-left: 5px;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.start {
+    width: 75%;
+    height: 25px;
+    float: left;
+}
+
+.datepicker {
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.end {
+    width: 75%;
+    height: 25px;
+    float: left;
+}
+
+.alarm {
+    width: 75%;
+    height: 25px;
+    float: left;
+    display: flex;
+    align-items: center;
+}
+
+.alarm input {
+    margin: 0px;
+    height: 100%;
+}
+
+.alarm span {
+    margin-left: 10px;
+    width: 50px !important;
+}
+
+.alarm select {
+    width: 115px;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    margin-left: 5px;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.contents {
+    width: 75%;
+    height: 200px;
+    float: left;
+}
+
+.contents textarea {
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgb(0, 0, 0);
+    padding: 1px;
+    padding-left: 5px;
+    resize: none;
+}
+
+.buttonbox {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.submitButton {
+    width: 70px;
+    height: 35px;
+    font-size: 15px;
+    border: none;
+    background-color: skyblue;
+    color: white;
+    margin: 0px 2px 0px 2px;
+}
+
+.submitButton:hover {
+    background-color: rgb(100, 180, 255);
+}
+
+.cancelButton {
+    width: 70px;
+    height: 35px;
+    font-size: 15px;
+    border: none;
+    background-color: coral;
+    color: white;
+    margin: 0px 2px 0px 2px;
+}
+
+.cancelButton:hover {
+    background-color: rgb(255, 100, 100);
+}
+
+.Calendar>div {
+    width: 100% !important;
+    height: 240px !important;
+    margin: 0px !important;
+}
+
+.Calendar>div>div {
+    width: 100% !important;
+    padding: 0px !important;
+    padding-top: 10px !important;
+    margin: 0px !important;
+}
+
+div[role="row"] {
+    width: 100% !important;
+    padding: 0px !important;
+    margin: 0px !important;
+    max-height: 30px !important;
+}
+
+div[role="row"] button {
+    height: 28px !important;
+}

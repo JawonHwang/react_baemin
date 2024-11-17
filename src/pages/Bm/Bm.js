@@ -8,10 +8,10 @@ import Main from "../Main/Main";
 import Admin from "../Admin/Admin";
 import Join from "../JoinClub/Join";
 import Community from "../Community/Community";
-// import { useCalendar } from "./useCalendar";
+import { useCalendar } from "./useCalendar";
 import { LoginContext } from "../../App";
 
-// export const ListContext = createContext();
+export const ListContext = createContext();
 const MemberContext = createContext();
 
 const Baemin = () => {
@@ -41,7 +41,7 @@ const Baemin = () => {
 
     // Calendar 상위 컴포넌트에서 사용할 상태와 함수
 
-    // const { dbList, refreshList } = useCalendar();
+    const { dbList, refreshList } = useCalendar();
 
     return (
         <MemberContext.Provider value={{ member, setMember }}>
@@ -54,9 +54,9 @@ const Baemin = () => {
                     <Routes>
                         <Route path="/" element={<Main />} />
                         <Route path="calendar/*" element={
-                            // <ListContext.Provider value={{ dbList, refreshList }}>
+                            <ListContext.Provider value={{ dbList, refreshList }}>
                                 <Calendar />
-                            // </ListContext.Provider>
+                            </ListContext.Provider>
                         } />
                         <Route path="/Admin/*" element={<Admin />} />
                         <Route path="join/*" element={<Join />} />
