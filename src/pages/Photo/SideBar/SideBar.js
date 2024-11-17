@@ -7,7 +7,7 @@ const SideBar = () => {
         <div className={style.list}>
             <div className={style.menu}>
                 <Link className={`${style.link} ${location.pathname === '/baemin/community/photo' && style.selected}`} to="/baemin/community/photo">
-                    목록
+                    photo
                 </Link>
             </div>
         </div>

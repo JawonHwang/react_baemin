@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";    
 import styled from "styled-components";
-import style from "../SlideBar.module.css";
+import style from "./SideBar.module.css";
 import styles from "./CalendarSlide.module.css";
 import Modal from "./CalendarModal"
 import dayjs from "dayjs";

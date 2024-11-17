@@ -5,67 +5,67 @@ import axios from 'axios';
 import ReactQuill from './ReactQuill';
 
 function Update() {
-    const [board, setBoard] = useState({});
+    const [photo, setPhoto] = useState({});
     const navi = useNavigate();
-    const { boardId } = useParams();
+    const { photoId } = useParams();
 
     useEffect(() => {
-        axios.get(`/api/board/contents/${boardId}`)
+        axios.get(`/api/photo/contents/${photoId}`)
             .then((resp) => {
-                const boardData = resp.data;
-                setBoard({
-                    boardId: boardData.boardId,
-                    boardTitle: boardData.boardTitle,
-                    boardContents: boardData.boardContents,
+                const photoData = resp.data;
+                setPhoto({
+                    photoId: photoData.photoId,
+                    photoTitle: photoData.photoTitle,
+                    photoContents: photoData.photoContents,
                 });
-                console.log(boardData);
+                console.log(photoData);
             })
             .catch((error) => {
                 console.error(error);
             });
-    }, [boardId]);
+    }, [photoId]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setBoard((prev) => ({ ...prev, [name]: value }));
+        setPhoto((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleFileChange = (e) => {
-        setBoard((prev) => ({ ...prev, file: e.target.files[0] }));
+        setPhoto((prev) => ({ ...prev, file: e.target.files[0] }));
     };
 
     const handleCancel = () => {
-        navi(`/baemin/community/detail/${boardId}`);
+        navi(`/baemin/community/photo/detail/${photoId}`);
     };
 
     const handleUpdate = () => {
 
-        if (!board.boardTitle) {
+        if (!photo.photoTitle) {
             alert("제목은 필수 입력 항목입니다.");
             return;
         }
 
-        if (!board.boardContents) {
+        if (!photo.photoContents) {
             alert("내용은 필수 입력 항목입니다.");
             return;
         }
 
         const formData = new FormData();
-        formData.append('boardTitle', board.boardTitle);
-        formData.append('boardContents', board.boardContents);
+        formData.append('photoTitle', photo.photoTitle);
+        formData.append('photoContents', photo.photoContents);
 
         // 파일이 있을 경우에만 추가
-        if (board.file) {
-            formData.append('files', board.file);
+        if (photo.file) {
+            formData.append('files', photo.file);
         }
 
-        axios.put(`/api/board/update/${boardId}`, formData, {
+        axios.put(`/api/photo/update/${photoId}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
         })
             .then((resp) => {
-                navi(`/baemin/community/detail/${boardId}`);
+                navi(`/baemin/community/photo/detail/${photoId}`);
             })
             .catch((e) => {
                 console.error(e);
@@ -73,12 +73,12 @@ function Update() {
     };
 
     return (
-        <div className="boardContainer">
+        <div className="photoContainer">
             <div className={style.write}>글 수정</div>
             <hr></hr>
             <div className={style.margin}>
                 제목
-                <input type="text" placeholder="제목" name="boardTitle" onChange={handleChange} value={board.boardTitle} className={style.title} /><br />
+                <input type="text" placeholder="제목" name="photoTitle" onChange={handleChange} value={photo.photoTitle} className={style.title} /><br />
                 <hr></hr>
                 {/* 파일 첨부
                 <input type="file" onChange={handleFileChange} className={style.file} /> */}
@@ -87,8 +87,8 @@ function Update() {
             <div className={style.editor}>
                 <ReactQuill
                     id="editor"
-                    value={board.boardContents}
-                    setValue={(value) => setBoard({ ...board, boardContents: value })}
+                    value={photo.photoContents}
+                    setValue={(value) => setPhoto({ ...photo, photoContents: value })}
                 />
             </div>
 

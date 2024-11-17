@@ -20,7 +20,7 @@ const CircularIndeterminate = () => {
 const Detail = () => {
     const { loginID } = useContext(LoginContext);
 
-    const { boardId } = useParams();
+    const { photoId } = useParams();
     const navi = useNavigate();
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -37,14 +37,14 @@ const Detail = () => {
 
     useEffect(() => {
         setLoading(true);
-        axios.get(`/api/board/contents/${boardId}`).then((resp) => {
+        axios.get(`/api/photo/contents/${photoId}`).then((resp) => {
             setBoard(resp.data);
-            axios.get(`/api/boardFile/${boardId}`).then((resp) => {
+            axios.get(`/api/photoFile/${photoId}`).then((resp) => {
                 setFiles(resp.data);
             });
             setLoading(false);
         });
-    }, [boardId]);
+    }, [photoId]);
 
     // useEffect(() => {
     //     axios.get(`/api/reply/com/${seq}`).then((resp) => {
@@ -59,7 +59,7 @@ const Detail = () => {
 
     const handleDelete = () => {
         axios
-            .delete(`/api/board/delete/${boardId}`)
+            .delete(`/api/photo/delete/${photoId}`)
             .then((resp) => {
                 navi("/baemin/community");
             })
@@ -131,7 +131,7 @@ const Detail = () => {
     // };
 
     const handleDownload = (sysName) => {
-        axios.get(`/api/boardFile/download/${sysName}`, {
+        axios.get(`/api/photoFile/download/${sysName}`, {
             responseType: 'blob',
         })
             .then((response) => {
@@ -169,29 +169,29 @@ const Detail = () => {
     }
 
     return (
-        <div className={style.boardContainer}>
+        <div className={style.photoContainer}>
             <div>
-                <div className={style.title}>{Board.boardTitle}</div>
+                <div className={style.title}>{Board.photoTitle}</div>
                 <div className={style.info}>
                     <div className={style.left}>
 
                     </div>
                     <div className={style.right}>
-                        <div className={style.writer}>{Board.boardWriter}</div>
+                        <div className={style.writer}>{Board.photoWriter}</div>
                         <div className={style.num}>
-                            <div className={style.write_date}>{Board.boardWriteDate}</div>
-                            <div className={style.view_count}>조회수 {Board.boardViewCount}</div>
+                            <div className={style.write_date}>{Board.photoWriteDate}</div>
+                            <div className={style.view_count}>조회수 {Board.photoViewCount}</div>
                         </div>
                     </div>
                     <div className={style.end}>
                         <div align="end" className={style.buttons}>
-                            {loginID == Board.boardWriter ? (
+                            {loginID == Board.photoWriter ? (
                                 <>
-                                    <Link to="/baemin/community" >
+                                    <Link to="/baemin/community/photo" >
                                         <button>Back</button>
                                     </Link>
                                     <button onClick={handleDelete}>Del</button>
-                                    <Link to={`/baemin/community/update/${boardId}`}>
+                                    <Link to={`/baemin/community/photo/update/${photoId}`}>
                                         <button>Edit</button>
                                     </Link>
                                 </>
@@ -207,13 +207,13 @@ const Detail = () => {
                         첨부 파일 :
                         <div className={style.files}>
                             {files.map((file) => (
-                                <p key={file.boardFileParentId}>
+                                <p key={file.photoFileParentId}>
                                     |{" "}
                                     <span
                                         style={{ color: "blue", cursor: "pointer" }}
                                         onClick={() => handleDownload(file.sys_name)}
                                     >
-                                        {file.boardFileOriName}
+                                        {file.photoFileOriName}
                                     </span>
                                 </p>
                             ))}
@@ -222,7 +222,7 @@ const Detail = () => {
                         <hr></hr>
                     </>
                 )}
-                <div className={style.contents} dangerouslySetInnerHTML={{ __html: Board.boardContents }}></div>
+                <div className={style.contents} dangerouslySetInnerHTML={{ __html: Board.photoContents }}></div>
             </div>
             {/* {showReply && (
                 <>

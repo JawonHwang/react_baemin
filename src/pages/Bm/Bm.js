@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import Calendar from "../Calendar/Calendar";
 import { useContext, useEffect, useState, createContext } from "react";
 import axios from "axios";
 import { Container } from "reactstrap";
@@ -11,6 +10,7 @@ import Community from "../Community/Community";
 import Board from "../Board2/Board";
 import { useCalendar } from "./useCalendar";
 import { LoginContext } from "../../App";
+import CalendarMain from "../Calendar/CalendarMain";
 
 export const ListContext = createContext();
 const MemberContext = createContext();
@@ -55,7 +55,7 @@ const Baemin = () => {
                         <Route path="/" element={<Main />} />
                         <Route path="calendar/*" element={
                             <ListContext.Provider value={{ dbList, refreshList }}>
-                                <Calendar />
+                                <CalendarMain />
                             </ListContext.Provider>
                         } />
                         <Route path="/Admin/*" element={<Admin />} />
