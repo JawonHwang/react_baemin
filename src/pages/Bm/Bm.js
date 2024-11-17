@@ -8,6 +8,7 @@ import Main from "../Main/Main";
 import Admin from "../Admin/Admin";
 import Join from "../JoinClub/Join";
 import Community from "../Community/Community";
+import Board from "../Board2/Board";
 import { useCalendar } from "./useCalendar";
 import { LoginContext } from "../../App";
 
@@ -17,16 +18,15 @@ const MemberContext = createContext();
 const Baemin = () => {
 
     const { loginID, setLoginID } = useContext(LoginContext);
-    
+
     const [member, setMember] = useState({});
-    
-    console.log(loginID)
 
     useEffect(() => {
         if (loginID) { // loginID가 유효한 경우에만 요청
             axios.get(`/api/member/getmem/${loginID}`)
                 .then(resp => {
                     setMember(resp.data);
+                    console.log(resp.data);
                 })
                 .catch(error => {
                     console.error("Error fetching member data:", error);
@@ -35,9 +35,9 @@ const Baemin = () => {
             console.warn("No loginID provided.");
         }
     }, [loginID]);
-    
 
-    console.log(member);
+
+    //console.log(member);
 
     // Calendar 상위 컴포넌트에서 사용할 상태와 함수
 
@@ -61,6 +61,7 @@ const Baemin = () => {
                         <Route path="/Admin/*" element={<Admin />} />
                         <Route path="join/*" element={<Join />} />
                         <Route path="community/*" element={<Community />} />
+                        <Route path="board/*" element={<Board />} />
                     </Routes>
 
                 </div>

@@ -7,9 +7,16 @@ import { InputIcon } from 'primereact/inputicon';
 import { ListBox } from 'primereact/listbox';
 import { Chart } from 'primereact/chart';
 import { Knob } from 'primereact/knob';
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
+import JenderStatic from '../AdminDashboard/Static/Jender';
+import AgeStatic from '../AdminDashboard/Static/Age';
 const AdminDashboard = () => {
     const [valueReport, setValueReport] = useState(50);//신고 답변률
     const [valueQ, setValueQ] = useState(80);//질문 답변률
+
+    //공지사항 테이블 데이터
+    const [products, setProducts] = useState([]);
 
     //이번달 일정
     const [selectedList, setSelectedList] = useState(null);
@@ -252,25 +259,18 @@ const AdminDashboard = () => {
                     <TabView>
                         <TabPanel header="연령별">
                             <p className="m-0">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                eur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                               {/*<AgeStatic/>*/}
+                               <JenderStatic/>
                             </p>
                         </TabPanel>
                         <TabPanel header="성별">
                             <p className="m-0">
-                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, 
-                                eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo
-                                enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui 
-                                ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
+                                <JenderStatic/>
                             </p>
                         </TabPanel>
                         <TabPanel header="기수">
                             <p className="m-0">
-                                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti 
-                                quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in
-                                culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. 
-                                Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
+                                <JenderStatic/>
                             </p>
                         </TabPanel>
                     </TabView>
@@ -285,9 +285,19 @@ const AdminDashboard = () => {
                     </div>
                     <div className = "mt-4" style={{fontWeight:"bold",maxHeight:"800px"}}>이찬양, 김승엽, 황자원</div>
                 </div>
-                <div className = {style.radius15} style={{width:'70%'}}>질문 유형 분석</div>
+                <div className = {style.radius15} style={{width:'70%'}}>
+                    <div>공지사항</div>
+                    <div className='mt-4'>
+                        <DataTable size={'small'} value={products} tableStyle={{ minWidth: '50rem' }}>
+                            <Column field="code" header="순번"></Column>
+                            <Column field="name" header="제목"></Column>
+                            <Column field="category" header="등록일"></Column>
+                            <Column field="quantity" header="등록자"></Column>
+                        </DataTable>
+                    </div>
+                </div>
                 <div className = {style.radius15} style={{width:"30%"}}>
-                    <div>출석률</div>
+                    <div>질문 유형 분석</div>
                     <Chart type="pie" data={chartData} options={chartOptions} className="w-full" />
                 </div>
             </div>
