@@ -2,19 +2,23 @@
     background-color: black !important;
     max-height: 8933px;
     max-width: 1920px;
+    color: #FFFFFF;
+    padding: 20px;
 }
+
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
     border-radius: 6px;
     background: rgba(255, 255, 255, 0.4);
 }
+
 ::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 6px;
 }
 
-.mainText{
+.mainText {
     position: absolute;
     width: 700px;
     height: 635px;
@@ -26,16 +30,73 @@
     font-weight: 700;
     font-size: 120px;
     line-height: 106.24%;
-    /* or 127px */
     letter-spacing: -0.02em;
     background-color: black;
     color: #FFFFFF;
 }
 
-.main{
+.main {
     color: white;
 }
 
-.main2{
+.main2 {
     color: #efff04;
+}
+
+.content {
+    margin-top: 700px;
+    padding: 20px;
+}
+
+.introduction, .history, .promotion, .join {
+    margin-bottom: 40px;
+}
+
+.intText {
+    width: 668px;
+    height: 127px;
+    top: 687px;
+    left: 263px;
+    
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 100px;
+    line-height: 127.48%;
+    letter-spacing: -0.02em;
+    background-color: black;
+    color: #FFFFFF;
+}
+
+.history ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.history li {
+    margin-bottom: 10px;
+}
+
+.videoPlaceholder {
+    background-color: #333;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.joinButton {
+    background-color: #efff04;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.footer {
+    margin-top: 40px;
+    font-size: 14px;
+    color: #999;
 }

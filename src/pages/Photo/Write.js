@@ -21,7 +21,7 @@ import { FileUpload } from 'primereact/fileupload';
 function Write() {
   const { member } = useContext(MemberContext);
 
-  const [board, setBoard] = useState({});
+  const [photo, setBoard] = useState({});
   const [files, setFiles] = useState([]);
   const navi = useNavigate();
   const { loginID } = useContext(LoginContext);
@@ -48,33 +48,33 @@ function Write() {
 
   const handleAdd = () => {
 
-    if (!board.boardTitle) {
+    if (!photo.photoTitle) {
       alert("제목을 입력하세요.");
       return;
     }
-    const trimContent = board.boardContents.trim();
+    const trimContent = photo.photoContents.trim();
     if (!trimContent) {
       alert("내용을 입력하세요.");
       return;
     }
 
     const formData = new FormData();
-    formData.append('boardWriter', loginID);
-    formData.append('boardTitle', board.boardTitle);
-    formData.append('boardContents', trimContent);
+    formData.append('photoWriter', loginID);
+    formData.append('photoTitle', photo.photoTitle);
+    formData.append('photoContents', trimContent);
 
     files.forEach((file) => {
       formData.append(`files`, file);
     });
 
     axios
-      .post('/api/board', formData, {
+      .post('/api/photo', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
       .then((resp) => {
-        navi('/baemin/community');
+        navi('/baemin/community/photo');
       })
       .catch((e) => {
         console.error(e);
@@ -82,7 +82,7 @@ function Write() {
   };
 
   return (
-    <div className="boardContainer">
+    <div className="photoContainer">
       <div className={style.write}>COMMUNITY - 글쓰기</div>
       <hr></hr>
       <div className={style.margin}>
@@ -90,9 +90,9 @@ function Write() {
         <input
           type="text"
           placeholder="제목"
-          name="boardTitle"
+          name="photoTitle"
           onChange={handleChange}
-          value={board.boardTitle}
+          value={photo.photoTitle}
           className={style.title}
         />
         <br />
@@ -157,7 +157,7 @@ function Write() {
           내용
         </div>
         <div className={style.editor}>
-          <ReactQuill id="editor" value={board.boardContents} setValue={(value) => setBoard({ ...board, boardContents: value })} style={{ height: "325px", width: "100%" }} />
+          <ReactQuill id="editor" value={photo.photoContents} setValue={(value) => setBoard({ ...photo, photoContents: value })} style={{ height: "325px", width: "100%" }} />
         </div>
         <hr></hr>
         <div className={style.btn}>
