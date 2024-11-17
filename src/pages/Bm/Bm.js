@@ -40,7 +40,6 @@ const Baemin = () => {
     //console.log(member);
 
     // Calendar 상위 컴포넌트에서 사용할 상태와 함수
-
     const { dbList, refreshList } = useCalendar();
 
     return (

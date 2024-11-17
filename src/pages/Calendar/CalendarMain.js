@@ -6,12 +6,12 @@ import style from "./Calendar.module.css";
 import 'primeicons/primeicons.css';
 import Calendar from './Calendar';
 
-function CalendarMain() {
+function CalendarMain({ refreshList }) {
     return (
         <div className={style.Container}>
-            <div className={style.sideBar}>
-                <SideBar></SideBar>
-            </div>
+            {/* <div className={style.sideBar}>
+                <SideBar refreshList={refreshList} />
+            </div> */}
             <div className="container">
                 <Routes>
                     <Route path="/" element={<Calendar />} />
