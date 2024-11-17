@@ -180,7 +180,7 @@ const TopNavigator = () => {
                 <Col className={styles.header_right}>
                     <Row>
                         <Col>
-                            <Link className={styles.linkurl} to="/">
+                            <Link className={styles.linkurl} to="/baemin">
                                 <div
                                     className={activeLink === '' ? styles.activeLink : styles.linkurl}
                                     onClick={() => handleLinkClick('')}
