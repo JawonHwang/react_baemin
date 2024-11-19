@@ -175,7 +175,7 @@ const FeesManagement = () => {
         { field: 'isPaid', header: '납부 여부', editor: confirmEditor },
         { field: 'payDate', header: '납부일', editor: dateEditor },
         { field: 'remarks', header: '비고', editor: textEditor },
-        { field: 'admin.adminId', header: '수정자', editor: textEditor },
+        { field: 'admin.adminId', header: '수정자'},
         { field: 'uptAt', header: '수정일' }
     ];
 
