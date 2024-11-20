@@ -83,8 +83,14 @@ const AdminDashboard = () => {
     }, []);
 
     useEffect(() => {
-        //회원
+        //공지사항
+        const fetchNoticeData = async () => {
+            const response = await axios.get('/api/admin/management/notice/getAll');
+            setProducts(response.data);
+        }
+        fetchNoticeData();
         
+        //회원
         const fetchMemberData = async () => {
             try {
                 const count = await axios.get("/api/admin/count/member");
@@ -162,6 +168,31 @@ const AdminDashboard = () => {
     const naviQuestion = () => {
         navigate("/baemin/admin/toQuestionsManagement");
     };
+
+    const naviNotice = () => {
+        navigate('/baemin/admin/toNoticesManagement');
+    };
+
+    const col = [
+        { field: 'notId', header: '순번' },
+        { field: 'title', header: '제목' },
+        { field: 'tag.notTagName', header: '태그'},
+        { 
+            field: 'views', 
+            header: '조회수',
+            body: (rowData) => {
+                const iconColor = rowData.views > 100 ? 'green' : 'gray'; // 조회수에 따라 색상 변경
+                return (
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <i className="pi pi-eye" style={{ marginRight: '8px', color: iconColor }}></i>
+                        {rowData.views}
+                    </div>
+                );
+            }
+        },
+        { field: 'creAt', header: '등록일' },
+        { field: 'adminId', header: '작성자' }
+    ];
 
     return (
         <div className='w-full'>
@@ -286,13 +317,13 @@ const AdminDashboard = () => {
                     <div className = "mt-4" style={{fontWeight:"bold",maxHeight:"800px"}}>이찬양, 김승엽, 황자원</div>
                 </div>
                 <div className = {style.radius15} style={{width:'70%'}}>
-                    <div>공지사항</div>
+                    <div onClick={naviNotice} style={{ cursor: 'pointer' }}>공지사항</div>
                     <div className='mt-4'>
-                        <DataTable size={'small'} value={products} tableStyle={{ minWidth: '50rem' }}>
-                            <Column field="code" header="순번"></Column>
-                            <Column field="name" header="제목"></Column>
-                            <Column field="category" header="등록일"></Column>
-                            <Column field="quantity" header="등록자"></Column>
+                        <DataTable value={products} size={'small'} editMode="row" dataKey="notId" tableStyle={{ minWidth: '50rem' }} paginator rowsPerPageOptions={[5, 10, 25]} rows={5}>
+                            {col.map(({ field, editor, style, body }) => {
+                                return <Column key={field} field={field} editor={editor} body={body} style={style} />;
+                            })}
+                            <Column headerStyle={{ width: '3%', minWidth: '5rem', minHeight:'2rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
                         </DataTable>
                     </div>
                 </div>
