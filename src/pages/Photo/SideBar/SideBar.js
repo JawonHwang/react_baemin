@@ -6,8 +6,13 @@ const SideBar = () => {
     return (
         <div className={style.list}>
             <div className={style.menu}>
+                <Link className={`${style.link} ${location.pathname === '/baemin/community' && style.selected}`} to="/baemin/community">
+                    자유 게시판
+                </Link>
+            </div>
+            <div className={style.menu}>
                 <Link className={`${style.link} ${location.pathname === '/baemin/community/photo' && style.selected}`} to="/baemin/community/photo">
-                    photo
+                    사진첩
                 </Link>
             </div>
         </div>

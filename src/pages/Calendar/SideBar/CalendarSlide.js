@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";    
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
-import style from "./SideBar.module.css";
 import styles from "./CalendarSlide.module.css";
 import Modal from "./CalendarModal"
 import dayjs from "dayjs";
@@ -8,21 +7,21 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 
-const CalendarWrite = ({refreshList}) => {
+const CalendarWrite = ({ refreshList }) => {
     const [showModal, setShowModal] = useState(false);
-    
+
     useEffect(() => {
-        if(!showModal) {
+        if (!showModal) {
             refreshList();
         }
-     }, [showModal]);
+    }, [showModal]);
 
     return (
         <div className={styles.calendarslideBody}>
-            <button className={style.btn} onClick={() => setShowModal(true)}>
-                <strong>+ 일정 추가</strong>
+            <button className={styles.btn} onClick={() => setShowModal(true)}>
+                <strong >+ 일정 추가</strong>
             </button>
-            <Modal showModal={showModal} setShowModal={setShowModal} onEventAdded={refreshList}/>
+            <Modal showModal={showModal} setShowModal={setShowModal} onEventAdded={refreshList} />
             <div className={styles.Calendar}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DateCalendar showDaysOutsideCurrentMonth fixedWeekNumber={6} />
@@ -34,10 +33,10 @@ const CalendarWrite = ({refreshList}) => {
     );
 };
 
-const CalendarSlide = ({refreshList}) => {
+const CalendarSlide = ({ refreshList }) => {
     return (
-        <div className={style.Calendar}>
-            <CalendarWrite refreshList={refreshList}/>
+        <div className={styles.Calendar}>
+            <CalendarWrite refreshList={refreshList} />
         </div>
     );
 };

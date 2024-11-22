@@ -7,6 +7,7 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import axios from "axios";
 import { LoginContext } from "../../../App";
+import logo from '../Assets/Logo.png';
 
 const TopNavigator = () => {
     const [activeLink, setActiveLink] = useState("");
@@ -34,7 +35,7 @@ const TopNavigator = () => {
 
     useEffect(() => {
         const buttonStatus = localStorage.getItem('isButtonDisabled');
-        console.log(buttonStatus);
+        // console.log(buttonStatus);
         if (buttonStatus === 'true') {
             setIsButtonDisabled(true);
         }
@@ -87,65 +88,88 @@ const TopNavigator = () => {
     // 핸드폰 번호 유효성 검사
     const phoneRegex = /^\d{3}\d{3,4}\d{4}$/;
 
-    const handleRegister = () => {
+    const handleRegister = async () => {
+        // 이메일 유효성 검사
         if (!emailRegex.test(memEmail)) {
-            alert("Invalid email format");
+            alert("잘못된 이메일 형식입니다.");
             return;
         }
 
+        // 비밀번호 유효성 검사 (8자 이상, 숫자와 특수문자 포함)
         if (!passwordRegex.test(pw)) {
-            alert("Password must be at least 8 characters long and contain at least one number and one special character");
+            alert("비밀번호는 최소 8자 이상이어야 하며, 숫자와 특수문자가 포함되어야 합니다.");
             return;
         }
 
+        // 비밀번호 확인
         if (pw !== pwcheck) {
-            alert("Passwords do not match");
+            alert("비밀번호가 일치하지 않습니다.");
             return;
         }
 
+        // 핸드폰 번호 유효성 검사
         if (!phoneRegex.test(memContact)) {
-            alert("Invalid phone number format");
+            alert("잘못된 전화번호 형식입니다. 숫자로만 작성해주세요 예)01012345678");
             return;
         }
-        
-        console.log(id,pw,memEmail,memDept,memStuId,memClubNum,memName,memBirth,memGender,memContact);
 
-        const formData = {
-            memId: id,
-            memPw: pw,
-            memEmail: memEmail,
-            memDept: memDept,
-            memStuId: memStuId,
-            memClubNum: memClubNum,
-            memName: memName,
-            memBirth: memBirth,
-            memGender: memGender,
-            memContact: memContact,
-        };
+        // 중복 ID 및 학번 체크
+        try {
+            const idResponse = await axios.get("/api/member/checkID", { params: { memId: id } });
+            if (idResponse.data) {
+                alert("이미 사용중인 ID입니다.");
+                return;
+            }
 
-        console.log(formData);
-        
-        axios.post("/api/member/register", formData, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then(() => {
-                setRegisterDialogVisible(false);
-            })
-            .catch(err => {
-                alert("Register failed! Please check your credentials.");
+            const stuIdResponse = await axios.get("/api/member/checkStuID", { params: { memStuId: memStuId } });
+            if (stuIdResponse.data) {
+                alert("이 학번은 이미 가입된 학번입니다. 확인해주세요.");
+                return;
+            }
+
+            // 승인된 학번 체크
+            const isAppResponse = await axios.get(`/api/join/isApp/${memStuId}`);
+            if (!isAppResponse.data) {
+                alert("이 학번은 승인되지 않았습니다. 관리자에게 문의해주세요.");
+                return;
+            }
+
+            // 모든 체크를 통과한 경우 회원가입 진행
+            const formData = {
+                memId: id,
+                memPw: pw,
+                memEmail: memEmail,
+                memDept: memDept,
+                memStuId: memStuId,
+                memClubNum: memClubNum,
+                memName: memName,
+                memBirth: memBirth,
+                memGender: memGender,
+                memContact: memContact,
+            };
+
+            await axios.post("/api/member/register", formData, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
             });
+
+            alert("회원가입에 성공했습니다!");
+            setRegisterDialogVisible(false);
+
+        } catch (err) {
+            alert("회원가입을 진행하는데 오류가 발생하였습니다.");
+        }
     };
 
-     // Email verification
-     const handleEmailVerification = () => {
+    // 이메일 인증
+    const handleEmailVerification = () => {
         axios.post(`/api/member/register/${memEmail}`)
             .then(() => {
-                alert("Verification code sent to your email.");
+                alert("해당 이메일로 인증코드가 발송되었습니다.");
             })
             .catch(err => {
-                alert("Failed to send verification code.");
+                alert("인증코드 발송에 실패하였습니다.");
             });
     };
 
@@ -153,13 +177,13 @@ const TopNavigator = () => {
         axios.post(`/api/member/verify/${emailCheck}`)
             .then(response => {
                 if (response.data === "success") {
-                    alert("성공");
+                    alert("인증에 성공하였습니다.");
                 } else {
-                    alert("Invalid verification code.");
+                    alert("올바르지 않은 인증코드입니다.");
                 }
             })
             .catch(err => {
-                alert("Verification failed.");
+                alert("인증에 실패하였습니다.");
             });
     };
 
@@ -180,17 +204,17 @@ const TopNavigator = () => {
                 <Col className={styles.header_right}>
                     <Row>
                         <Col>
-                            <Link className={styles.linkurl} to="/baemin">
+                            <Link className={styles.linkurl} to="/">
                                 <div
                                     className={activeLink === '' ? styles.activeLink : styles.linkurl}
                                     onClick={() => handleLinkClick('')}
                                 >
-                                    BADMINTON
+                                    <img className={styles.logo} src={logo}></img>
                                 </div>
                             </Link>
                         </Col>
                         <Col>
-                            <Link className={styles.linkurl} to="/baemin/Board">
+                            <Link className={styles.linkurl} to="/baemin/board">
                                 <div
                                     className={activeLink === 'Board' ? styles.activeLink : styles.linkurl}
                                     onClick={() => handleLinkClick('Board')}
@@ -200,24 +224,36 @@ const TopNavigator = () => {
                             </Link>
                         </Col>
                         <Col>
-                            <Link className={styles.linkurl} to={`/baemin/Calendar`}>
-                                <div>CALENDAR</div>
+                            <Link className={styles.linkurl} to={`/baemin/calendar`}>
+                                <div
+                                    className={activeLink === 'Calendar' ? styles.activeLink : styles.linkurl}
+                                    onClick={() => handleLinkClick('Calendar')}
+                                >CALENDAR</div>
                             </Link>
                         </Col>
                         <Col>
-                            <Link className={styles.linkurl} to={`/baemin/Community`}>
-                                <div>COMMUNITY</div>
+                            <Link className={styles.linkurl} to={`/baemin/community`}>
+                                <div
+                                    className={activeLink === 'Community' ? styles.activeLink : styles.linkurl}
+                                    onClick={() => handleLinkClick('Community')}
+                                >COMMUNITY</div>
                             </Link>
                         </Col>
                         <Col>
-                            <Link className={styles.linkurl} to={`/baemin/MyPage`}>
-                                <div>MY PAGE</div>
+                            <Link className={styles.linkurl} to={`/baemin/mypage`}>
+                                <div
+                                    className={activeLink === 'MyPage' ? styles.activeLink : styles.linkurl}
+                                    onClick={() => handleLinkClick('MyPage')}
+                                >MY PAGE</div>
                             </Link>
                         </Col>
                         <Col>
-                        {/* 비활성화된 경우에는 클릭 시 alert을 띄우고, 아니라면 Link로 이동 */}
+                            {/* 비활성화된 경우에는 클릭 시 alert을 띄우고, 아니라면 Link로 이동 */}
                             <Link className={styles.linkurl} to={`/baemin/join`} onClick={handleDisabledClick}>
-                                <div>동아리 가입 신청</div>
+                                <div
+                                    className={activeLink === 'join' ? styles.activeLink : styles.linkurl}
+                                    onClick={() => handleLinkClick('join')}
+                                >JOIN CLUB</div>
                             </Link>
                         </Col>
                         {loginID ? (
@@ -336,7 +372,7 @@ const TopNavigator = () => {
                     </div>
                     <div className="flex align-items-center gap-2">
                         <Button label="Register" onClick={handleRegister} className="p-3 w-full" />
-                        <Button label="Cancel" onClick={() => setRegisterDialogVisible(false)} className="p-3 w-full" />
+                        <Button label="Cancel" onClick={() => {setRegisterDialogVisible(false)}} className="p-3 w-full" />
                     </div>
                 </div>
             </Dialog>

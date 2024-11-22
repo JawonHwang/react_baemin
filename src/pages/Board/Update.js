@@ -18,7 +18,7 @@ function Update() {
                     boardTitle: boardData.boardTitle,
                     boardContents: boardData.boardContents,
                 });
-                console.log(boardData);
+                // console.log(boardData);
             })
             .catch((error) => {
                 console.error(error);

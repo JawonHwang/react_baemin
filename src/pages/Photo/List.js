@@ -51,8 +51,12 @@ const Free = () => {
 
     return (
         <div className="Photocontainer">
-            <div className={style.margin}>
-                Community - 포토
+            <div className='w-full'>
+                <div className='flex align-items-center'>
+                    <div style={{ color: '#EEF300', fontSize: 'small', marginLeft: '30px', marginTop:'30px' }}>●</div>
+                    <div className='ml-3' style={{ fontWeight: 'bold', fontSize: 'larger' , marginTop:'30px'}}>COMMUNITY</div>
+                    <div className='ml-5' style={{ fontWeight: 'bolder', fontSize: 'larger' , marginTop:'30px'}}>사진첩</div>
+                </div>
             </div>
             <hr></hr>
             <div className={style.margin}>

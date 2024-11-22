@@ -1,12 +1,13 @@
 import React from 'react';
 import styles from "./Main.module.css";
+import union from './Img/Union.png';
 
 const Main = () => {
     return (
         <div className={styles.container}>
             <div className={styles.mainText}>
                 <div className={styles.main}>
-                    KONGJU <br /> 
+                    KONGJU <br />
                     UNIVERSITY <br />
                     BADMINTON <br />
                     CLUB <br />
@@ -15,14 +16,14 @@ const Main = () => {
                     BAEMIN
                 </div>
             </div>
-            {/* <div>
-                <img src="/Img/Union.png"></img>
-            </div> */}
+            <div className={styles.mainRight}>
+                <img src={union}></img>
+            </div>
             <div className={styles.content}>
                 <div className={styles.introduction}>
-                <div className={styles.intText}>
-                    Introduction
-                </div>
+                    <div className={styles.intText}>
+                        Introduction
+                    </div>
                     공주대학교 천안캠퍼스 배드민턴 동아리 입니다. 배드민턴을 사랑하는 학생들이 모여 함께 즐기고 실력을 향상시키는 것을 목표로 합니다. 우리는 모두가 배드민턴을 통해 건강한 라이프스타일을 추구하며, 우정을 쌓아가는 동아리입니다.
                 </div>
                 <div className={styles.history}>

@@ -63,7 +63,7 @@ const FeesDetail = () => {
                 totalMoney: product.income - product.expend,
             }));*/
             //setProducts(updatedProducts);
-            console.log(response.data);
+            // console.log(response.data);
             setProducts(response.data);
         } catch (error) {
             console.error('데이터를 불러오는데 문제가 발생했습니다.', error);

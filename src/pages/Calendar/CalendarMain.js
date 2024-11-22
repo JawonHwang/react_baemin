@@ -9,10 +9,10 @@ import Calendar from './Calendar';
 function CalendarMain({ refreshList }) {
     return (
         <div className={style.Container}>
-            {/* <div className={style.sideBar}>
+            <div className={style.sideBar}>
                 <SideBar refreshList={refreshList} />
-            </div> */}
-            <div className="container">
+            </div>
+            <div className={style.mainContent}>
                 <Routes>
                     <Route path="/" element={<Calendar />} />
                 </Routes>

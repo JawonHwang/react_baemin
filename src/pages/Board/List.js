@@ -55,42 +55,23 @@ const Free = () => {
                 <Input placeholder="검색" className={style.input_search} onChange={inputChangeHandler}></Input>
             </div>
             <hr></hr>
-            <div className="body">
-                <div className={style.margin}>
-                    자유 게시판
+            <div className='w-full'>
+                <div className='flex align-items-center'>
+                    <div style={{ color: '#EEF300', fontSize: 'small', marginLeft:'30px' }}>●</div>
+                    <div className='ml-3' style={{ fontWeight: 'bold', fontSize: 'larger' }}>COMMUNITY</div>
+                    <div className='ml-5' style={{ fontWeight: 'bolder', fontSize: 'larger' }}>자유게시판</div>
                 </div>
-                <hr></hr>
-                <div className={style.margin}>
-                    <div className={style.boardContainer}>
-                        <div className={style.tableRow + ' ' + style.tableHeader}>
-                            <div className={style.tableHeader}>작성자</div>
-                            <div className={style.tableHeader}>제목</div>
-                            <div className={style.tableHeader}>내용</div>
-                            <div className={style.tableHeader}>조회수</div>
-                            <div className={style.tableHeader}>작성일</div>
-                        </div>
-                        {search === ''
-                            ? visibleBoard.map((e) => (
-                                <div key={e.boardId} className={style.tableRow}>
-                                    <div className={style.tableCell}>
-                                        {e.boardWriter}
-                                    </div>
-                                    <div className={style.tableCell}>
-                                        <Link to={`detail/${e.boardId}`}>{e.boardTitle}</Link>
-                                    </div>
-                                    <div className={style.tableCell}>{e.boardContents}</div>
-                                    <div className={style.tableCell}>{e.boardViewCount}</div>
-                                    <div className={style.tableCell}>{e.boardWriteDate}</div>
-                                </div>
-                            ))
-                            : boards
-                                .filter(
-                                    (e) =>
-                                        e.boardWriter.includes(search) ||
-                                        e.boardContents.includes(search) ||
-                                        e.boardTitle.includes(search)
-                                )
-                                .map((e) => (
+                <div className="p-fluid mt-5">
+                    <div className={style.margin}>
+                        <div className={style.boardContainer}>
+                            <div className={style.tableRow + ' ' + style.tableHeader}>
+                                <div className={style.tableHeader}>작성자</div>
+                                <div className={style.tableHeader}>제목</div>
+                                <div className={style.tableHeader}>조회수</div>
+                                <div className={style.tableHeader}>작성일</div>
+                            </div>
+                            {search === ''
+                                ? visibleBoard.map((e) => (
                                     <div key={e.boardId} className={style.tableRow}>
                                         <div className={style.tableCell}>
                                             {e.boardWriter}
@@ -98,11 +79,30 @@ const Free = () => {
                                         <div className={style.tableCell}>
                                             <Link to={`detail/${e.boardId}`}>{e.boardTitle}</Link>
                                         </div>
-                                        <div className={style.tableCell}>{e.boardContents}</div>
                                         <div className={style.tableCell}>{e.boardViewCount}</div>
                                         <div className={style.tableCell}>{e.boardWriteDate}</div>
                                     </div>
-                                ))}
+                                ))
+                                : boards
+                                    .filter(
+                                        (e) =>
+                                            e.boardWriter.includes(search) ||
+                                            e.boardContents.includes(search) ||
+                                            e.boardTitle.includes(search)
+                                    )
+                                    .map((e) => (
+                                        <div key={e.boardId} className={style.tableRow}>
+                                            <div className={style.tableCell}>
+                                                {e.boardWriter}
+                                            </div>
+                                            <div className={style.tableCell}>
+                                                <Link to={`detail/${e.boardId}`}>{e.boardTitle}</Link>
+                                            </div>
+                                            <div className={style.tableCell}>{e.boardViewCount}</div>
+                                            <div className={style.tableCell}>{e.boardWriteDate}</div>
+                                        </div>
+                                    ))}
+                        </div>
                     </div>
                 </div>
                 <hr></hr>

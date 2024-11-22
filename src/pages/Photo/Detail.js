@@ -130,8 +130,8 @@ const Detail = () => {
     //         .catch(() => { });
     // };
 
-    const handleDownload = (sysName) => {
-        axios.get(`/api/photoFile/download/${sysName}`, {
+    const handleDownload = (photoFileSysName) => {
+        axios.get(`/api/photoFile/download/${photoFileSysName}`, {
             responseType: 'blob',
         })
             .then((response) => {
@@ -140,7 +140,7 @@ const Detail = () => {
 
                 const link = document.createElement('a');
                 link.href = fileURL;
-                link.setAttribute('download', sysName);
+                link.setAttribute('download', photoFileSysName);
                 document.body.appendChild(link);
 
                 link.click();
@@ -211,7 +211,7 @@ const Detail = () => {
                                     |{" "}
                                     <span
                                         style={{ color: "blue", cursor: "pointer" }}
-                                        onClick={() => handleDownload(file.sys_name)}
+                                        onClick={() => handleDownload(file.photoFileSysName)}
                                     >
                                         {file.photoFileOriName}
                                     </span>

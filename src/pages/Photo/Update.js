@@ -18,7 +18,7 @@ function Update() {
                     photoTitle: photoData.photoTitle,
                     photoContents: photoData.photoContents,
                 });
-                console.log(photoData);
+                // console.log(photoData);
             })
             .catch((error) => {
                 console.error(error);

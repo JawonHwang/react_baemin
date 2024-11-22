@@ -7,6 +7,8 @@ import axios from 'axios';
 const CalendarInnerModal = ({ isOpen, onClose, eventDetails, onEventAdded }) => {
     if (!isOpen) return null;
 
+    const { calTitle, calContents, calStartTime, calEndTime } = eventDetails;
+
     const closeModal = (e) => {
         if (e.target.id === "modalOverlay") {
             onClose();
@@ -26,7 +28,7 @@ const CalendarInnerModal = ({ isOpen, onClose, eventDetails, onEventAdded }) => 
     }
     const handleDelete = (e) => {
         e.preventDefault();
-        axios.delete(`/api/calendar/${eventDetails.seq}`).then((res) => {
+        axios.delete(`/api/calendar/${eventDetails.calId}`).then((res) => {
             onEventAdded();
             onClose();
         });
@@ -39,10 +41,10 @@ const CalendarInnerModal = ({ isOpen, onClose, eventDetails, onEventAdded }) => 
                 <ul>
                     {eventDetails && (
                         <>
-                            <li><span>일정 제목</span> <div className={styles.modaltitle}>{eventDetails.title}</div></li>
-                            <li><span>일정 시간</span> <div className={styles.modaltime}>{formatDate(eventDetails.start)} ~ {formatDate(eventDetails.end, true)}</div></li>
-                            <li><span>일정 등록일</span> <div className={styles.modalwrite}>{formatWrite(eventDetails.write_date)}</div></li>
-                            <li><span>일정 내용</span> <div className={styles.modalcontents}>{eventDetails.contents}</div></li>    
+                            <li><span>일정 제목</span> <div className={styles.modaltitle}>{eventDetails.calTitle}</div></li>
+                            <li><span>일정 시간</span> <div className={styles.modaltime}>{formatDate(eventDetails.calStartTime)} ~ {formatDate(eventDetails.calEndTime, true)}</div></li>
+                            <li><span>일정 등록일</span> <div className={styles.modalwrite}>{formatWrite(eventDetails.calWriteDate)}</div></li>
+                            <li><span>일정 내용</span> <div className={styles.modalcontents}>{eventDetails.calContents}</div></li>    
                         </>
                     )}
                 </ul>

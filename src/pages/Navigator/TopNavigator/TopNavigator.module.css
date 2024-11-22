@@ -1,35 +1,39 @@
 .containerFluid {
-    max-width: 1660px;
-    height: 100%;
+  max-width: 1660px;
+  height: 100%;
 }
 
 .container {
-    background-color: #f8f9fa;
-  }
-  
-  .header_left {
-    text-align: center;
-  }
-  
-  .header_right {
-    text-align: center;
-  }
-  
-  .linkurl {
-    /* margin: 0 15px; */
-    cursor: pointer;
-    font-weight: bold;
-    color: #333;
-    text-transform: uppercase;
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-  
-  .linkurl:hover {
-    color: #007bff;
-  }
-  
-  .activeLink {
-    color: #007bff;
-  }
-  
+  background-color: #f8f9fa;
+}
+
+.logo {
+  height: 30px;
+  width: 28px;
+}
+
+.header_left {
+  text-align: center;
+}
+
+.header_right {
+  text-align: center;
+}
+
+.linkurl {
+  /* margin: 0 15px; */
+  cursor: pointer;
+  font-weight: bold;
+  color: #333;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.linkurl:hover {
+  color: #007bff;
+}
+
+.activeLink {
+  color: #007bff;
+}

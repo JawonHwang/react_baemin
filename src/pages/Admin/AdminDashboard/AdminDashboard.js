@@ -120,7 +120,7 @@ const AdminDashboard = () => {
 
                 const sumVisitors = await axios.get("/api/admin/visitors/sum");
                 setSumvisitorCount1(sumVisitors.data);
-                console.log(sumVisitors.data);
+                // console.log(sumVisitors.data);
             } catch (error) {
                 console.error('Error fetching visitor data:', error);
             }
