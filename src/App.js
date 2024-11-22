@@ -38,7 +38,7 @@ function App() {
         <CookiesProvider>
           <Routes>
             {/* <Route path="/" element={<Login />} /> */}
-            <Route path="/Baemin/*" element={<Baemin />} />
+            <Route path="/*" element={<Baemin />} />
           </Routes>
         </CookiesProvider>
       </LoginContext.Provider>

@@ -93,7 +93,7 @@ const MembersManagement = () => {
     const onRowEditComplete = async (e) => {
         let _products = [...products];
         let { newData, index } = e;
-        console.log("newData : " + newData.memberTier.memTier);
+        // console.log("newData : " + newData.memberTier.memTier);
         const member = {
                 memClubNum: newData.memClubNum,
                 memberTier: {

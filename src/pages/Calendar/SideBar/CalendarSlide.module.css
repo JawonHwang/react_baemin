@@ -1,7 +1,26 @@
+.btn {
+    width: 100%;
+    height: 40px;
+    border-radius: 5px;
+    border: none;
+    background-color: #10b981;
+    color: white;
+    position: relative;
+    z-index: 1;
+}
+
+.btn:hover {
+    background-color: #367A5C;
+}
+
+.calendarslideBody {
+    width: 50%;
+}
+
 .Calendar {
     width: 100%;
     position: relative;
-    top: 50px;
+    top: 20px;
 }
 
 .MyCalendar {
@@ -32,14 +51,16 @@
 }
 
 .scheduleTitle {
-    font-size: 17px;
+    font-size: 20px;
     margin-bottom: 20px;
-    color: rgb(0, 20, 255);
+    font-weight: 700;
+    color: #10b981;
 }
 
 .ModalBody {
     width: 100%;
     margin-bottom: 20px;
+    color: black;
 }
 
 .ModalBody ul {
@@ -110,33 +131,6 @@
     float: left;
 }
 
-.alarm {
-    width: 75%;
-    height: 25px;
-    float: left;
-    display: flex;
-    align-items: center;
-}
-
-.alarm input {
-    margin: 0px;
-    height: 100%;
-}
-
-.alarm span {
-    margin-left: 10px;
-    width: 50px !important;
-}
-
-.alarm select {
-    width: 115px;
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-    margin-left: 5px;
-    border: 1px solid rgb(0, 0, 0);
-}
-
 .contents {
     width: 75%;
     height: 200px;
@@ -160,31 +154,33 @@
 }
 
 .submitButton {
-    width: 70px;
-    height: 35px;
+    width: 125px;
+    height: 45px;
     font-size: 15px;
     border: none;
-    background-color: skyblue;
+    border-radius: 10px;
+    background-color: #10b981;
     color: white;
     margin: 0px 2px 0px 2px;
 }
 
 .submitButton:hover {
-    background-color: rgb(100, 180, 255);
+    background-color: #367A5C;
 }
 
 .cancelButton {
-    width: 70px;
-    height: 35px;
+    width: 125px;
+    height: 45px;
     font-size: 15px;
     border: none;
-    background-color: coral;
+    border-radius: 10px;
+    background-color: #10b981;
     color: white;
     margin: 0px 2px 0px 2px;
 }
 
 .cancelButton:hover {
-    background-color: rgb(255, 100, 100);
+    background-color: #367A5C;
 }
 
 .Calendar>div {
@@ -200,13 +196,23 @@
     margin: 0px !important;
 }
 
-div[role="row"] {
-    width: 100% !important;
-    padding: 0px !important;
-    margin: 0px !important;
-    max-height: 30px !important;
+.Calendar>div>div>div {
+    border-radius: 10px;
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-top: 2%;
+    color: white;
+}
+
+.Calendar>div>div>div button {
+    color: white;
+}
+
+div[role="row"] span {
+    color: white;
 }
 
 div[role="row"] button {
-    height: 28px !important;
+    height: 20px !important;
+    color: white;
 }

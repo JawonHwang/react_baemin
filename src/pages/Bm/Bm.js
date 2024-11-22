@@ -11,8 +11,9 @@ import Board from "../Board2/Board";
 import { useCalendar } from "./useCalendar";
 import { LoginContext } from "../../App";
 import CalendarMain from "../Calendar/CalendarMain";
+import MyPage from "../MyPage/MyPage";
 
-export const ListContext = createContext();
+const ListContext = createContext();
 const MemberContext = createContext();
 
 const Baemin = () => {
@@ -26,7 +27,7 @@ const Baemin = () => {
             axios.get(`/api/member/getmem/${loginID}`)
                 .then(resp => {
                     setMember(resp.data);
-                    console.log(resp.data);
+                    // console.log(resp.data);
                 })
                 .catch(error => {
                     console.error("Error fetching member data:", error);
@@ -52,15 +53,17 @@ const Baemin = () => {
                 <div className="MainContainer">
                     <Routes>
                         <Route path="/" element={<Main />} />
-                        <Route path="calendar/*" element={
+                        <Route path="baemin/calendar/*" element={
                             <ListContext.Provider value={{ dbList, refreshList }}>
-                                <CalendarMain />
+                                <CalendarMain refreshList={refreshList} />
                             </ListContext.Provider>
                         } />
-                        <Route path="/Admin/*" element={<Admin />} />
-                        <Route path="join/*" element={<Join />} />
-                        <Route path="community/*" element={<Community />} />
-                        <Route path="board/*" element={<Board />} />
+                        <Route path="baemin/admin/*" element={<Admin />} />
+                        <Route path="baemin/join/*" element={<Join />} />
+                        <Route path="baemin/community/*" element={<Community />} />
+                        <Route path="baemin/board/*" element={<Board />} />
+                        <Route path="baemin/mypage/*" element={<MyPage />} />
+
                     </Routes>
 
                 </div>
@@ -70,4 +73,4 @@ const Baemin = () => {
 };
 
 export default Baemin;
-export { MemberContext };
+export { MemberContext, ListContext };

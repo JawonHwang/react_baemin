@@ -18,7 +18,7 @@ const NonMemberManagement = () => {
     const fetchData = async () => {
         const response = await axios.get('/api/admin/management/nonMember/getAll');
         setProducts(response.data);
-        console.log(response);
+        // console.log(response);
     }
     useEffect(() => {
         fetchData();

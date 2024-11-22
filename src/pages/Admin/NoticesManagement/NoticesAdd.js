@@ -31,7 +31,7 @@ const NoticesAdd = () => {
             if (notId) {
                 const response = await axios.get(`/api/admin/management/notice/${notId}`);
                 const data = response.data;
-                console.log(data);
+                // console.log(data);
 
                 // 불러온 데이터로 상태 초기화
                 setTitle(data.title || '');

@@ -43,6 +43,14 @@
     color: #efff04;
 }
 
+.mainRight {
+    position: absolute;
+    width: 700px;
+    height: 635px;
+    left: 1126px;
+    top: 214px;
+}
+
 .content {
     margin-top: 700px;
     padding: 20px;

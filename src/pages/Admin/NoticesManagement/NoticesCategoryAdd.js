@@ -19,7 +19,7 @@ const NoticesCategoryAdd = () => {
         try {
           const response = await axios.get('/api/admin/management/noticeTag/getAll');
           setProducts(response.data);
-          console.log(response.data);
+        //   console.log(response.data);
         } catch (error) {
           console.error('Error fetching data: ', error);
         }
@@ -30,7 +30,7 @@ const NoticesCategoryAdd = () => {
     }, []);
 
     const saveOrderChanges = async (updatedProducts) => {
-        console.log(updatedProducts);
+        // console.log(updatedProducts);
         try {
             await axios.put('/api/admin/management/noticeTag/updateOrder', updatedProducts);
             alert('순서가 업데이트 되었습니다.');
