@@ -247,15 +247,15 @@ const TopNavigator = () => {
                                 >MY PAGE</div>
                             </Link>
                         </Col>
-                        <Col>
-                            {/* 비활성화된 경우에는 클릭 시 alert을 띄우고, 아니라면 Link로 이동 */}
+                        {/* <Col>
+                            비활성화된 경우에는 클릭 시 alert을 띄우고, 아니라면 Link로 이동
                             <Link className={styles.linkurl} to={`/baemin/join`} onClick={handleDisabledClick}>
                                 <div
                                     className={activeLink === 'join' ? styles.activeLink : styles.linkurl}
                                     onClick={() => handleLinkClick('join')}
                                 >JOIN CLUB</div>
                             </Link>
-                        </Col>
+                        </Col> */}
                         {loginID ? (
                             <Col>
                                 <div className={styles.linkurl} onClick={handleLogoutClick}>
@@ -264,6 +264,15 @@ const TopNavigator = () => {
                             </Col>
                         ) : (
                             <>
+                            <Col>
+                            {/* 비활성화된 경우에는 클릭 시 alert을 띄우고, 아니라면 Link로 이동 */}
+                            <Link className={styles.linkurl} to={`/baemin/join`} onClick={handleDisabledClick}>
+                                <div
+                                    className={activeLink === 'join' ? styles.activeLink : styles.linkurl}
+                                    onClick={() => handleLinkClick('join')}
+                                >JOIN CLUB</div>
+                            </Link>
+                        </Col>
                                 <Col>
                                     <div className={styles.linkurl} onClick={handleLoginClick}>
                                         LOGIN
