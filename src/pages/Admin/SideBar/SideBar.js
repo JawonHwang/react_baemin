@@ -26,7 +26,10 @@ const SideBar = () => {
                 </Link>
             </div>
             <div className={style.menu}>
-                <Link className={`${style.link} ${location.pathname === '/baemin/admin/toReportsManagement' && style.selected}`} to="/baemin/admin/toReportsManagement">
+                <Link className={`${style.link} ${location.pathname === '/baemin/admin/toReportsManagement' && style.selected}`} to="/baemin/admin/toReportsManagement" onClick={(e) => {
+                    e.preventDefault();//나중에 서비스 준비되면 onclick 삭제
+                    alert("준비 중입니다.");
+                }}>
                     신고 관리
                 </Link>
             </div>
@@ -36,17 +39,26 @@ const SideBar = () => {
                 </Link>
             </div>
             <div className={style.menu}>
-                <Link className={`${style.link} ${location.pathname === '/baemin/admin/toQuestionsManagement' && style.selected}`} to="/baemin/admin/toQuestionsManagement">
+                <Link className={`${style.link} ${location.pathname === '/baemin/admin/toQuestionsManagement' && style.selected}`} to="/baemin/admin/toQuestionsManagement" onClick={(e) => {
+                    e.preventDefault(); //나중에 서비스 준비되면 onclick 삭제
+                    alert("준비 중입니다.");
+                }}>
                      Q&A 관리
                 </Link>
             </div>
             <div className={style.menu}>
-                <Link className={`${style.link} ${location.pathname === '/baemin/admin/toFAQsManagement' && style.selected}`} to="/baemin/admin/toFAQsManagement">
+                <Link className={`${style.link} ${location.pathname === '/baemin/admin/toFAQsManagement' && style.selected}`} to="/baemin/admin/toFAQsManagement" onClick={(e) => {
+                    e.preventDefault();//나중에 서비스 준비되면 onclick 삭제
+                    alert("준비 중입니다.");
+                }}>
                     FAQ 관리
                 </Link>
             </div>
             <div className={style.menu}>
-                <Link className={`${style.link} ${location.pathname === '/baemin/admin/toTournamentsManagement' && style.selected}`} to="/baemin/admin/toTournamentsManagement">
+                <Link className={`${style.link} ${location.pathname === '/baemin/admin/toTournamentsManagement' && style.selected}`} to="/baemin/admin/toFAQsManagement" onClick={(e) => {
+                    e.preventDefault();//나중에 서비스 준비되면 onclick 삭제
+                    alert("준비 중입니다.");
+                }}>
                     대회 관리
                 </Link>
             </div>
@@ -57,7 +69,7 @@ const SideBar = () => {
             </div>
             <div className={style.menu}>
                 <Link className={`${style.link} ${location.pathname === '/baemin/admin/toAttendancesManagement' && style.selected}`} to="/baemin/admin/toAttendancesManagement">
-                    출석률 관리
+                    출석부 관리
                 </Link>
             </div>
         </div>

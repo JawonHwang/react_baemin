@@ -1,0 +1,196 @@
+* {
+    box-sizing: border-box;
+}
+
+.btn {
+    display: flex;
+    align-items: end;
+}
+
+.btn>button {
+    margin: 5px;
+    width: 70px;
+    height: 30px;
+    border-radius: 7px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 15px;
+    position: relative;
+    z-index: 1;
+    margin-right: 15px;
+}
+
+.btn>button:hover {
+    background-color: rgb(100, 180, 255);
+}
+
+.buttons button {
+    margin: 5px;
+    width: 70px;
+    height: 30px;
+    border-radius: 7px;
+    border: none;
+    background-color: rgb(130, 200, 255);
+    color: white;
+    font-size: 15px;
+    position: relative;
+    z-index: 1;
+}
+
+.buttons button:hover {
+    background-color: rgb(100, 180, 255);
+}
+
+.boardContainer {
+    width: 80%;
+    margin: auto;
+    margin-top: 35px;
+    min-width: 1200px;
+    border: 1px solid black;
+}
+
+.title {
+    height: 45px;
+    font-size: x-large;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.info {
+    width: 100%;
+    height: 90px;
+}
+
+.info>div {
+    float: left;
+}
+
+.left {
+    width: 10%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image>img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+.right {
+    width: 60%;
+    height: 100%;
+}
+
+.end {
+    width: 30%;
+    height: 100%;
+    display: flex;
+    justify-content: end;
+    align-items: end;
+}
+
+.writer {
+    width: 100%;
+    height: 50%;
+    font-weight: bold;
+}
+
+.num {
+    width: 100%;
+    height: 50%;
+}
+
+.num>div {
+    float: left;
+}
+
+.view_count {
+    margin-left: 20px;
+}
+
+.file {
+    width: 100%;
+    height: 25px;
+    margin-left: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.files>p {
+    float: left;
+    margin-left: 10px;
+}
+
+hr {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+table {
+    margin: auto;
+    width: 90%;
+}
+
+.reply {
+    width: 90%;
+    margin: auto;
+}
+
+.replyDiv {
+    display: flex;
+    align-self: center;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.replyForm {
+    width: 100%;
+    height: 120px;
+}
+
+p {
+    margin: 5px;
+}
+
+.text>p{
+    width: 100%;
+}
+
+.profile {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-self: center;
+}
+
+.profile img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+.contents {
+    width: 80%;
+    min-height: 450px;
+    max-height: 450px;
+    overflow-y: auto;
+    margin: auto;
+    min-width: 800px;
+}
+
+.text {
+    flex: 1;
+    width: 70%;
+}
+
+.recontents{
+    width: 100%;
+    max-height: 120px;
+    overflow-y: auto;
+}
