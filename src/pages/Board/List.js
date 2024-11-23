@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import style from "./List.module.css";
 import { Pagination, PaginationItem } from "@mui/material";
 import { Input, Button } from "reactstrap";
-
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 
@@ -15,6 +14,7 @@ const CircularIndeterminate = () => {
         </Box>
     );
 };
+
 const Free = () => {
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
@@ -25,24 +25,37 @@ const Free = () => {
     useEffect(() => {
         setLoading(true);
         axios.get("/api/board").then(resp => {
-            setBoards(resp.data);
+            // boardId 기준으로 역순 정렬
+            const sortedBoards = resp.data.sort((a, b) => b.boardId - a.boardId);
+            setBoards(sortedBoards);
             setLoading(false);
-        })
+        });
     }, []);
 
-    const totalItems = boards.length;
+    // 검색 결과 필터링
+    const filteredBoards = boards.filter(
+        (e) =>
+            e.boardWriter.includes(search) ||
+            e.boardContents.includes(search) ||
+            e.boardTitle.includes(search)
+    );
+
+    // 총 아이템 수와 페이지 수 계산
+    const totalItems = search === '' ? boards.length : filteredBoards.length;
     const totalPages = Math.ceil(totalItems / COUNT_PER_PAGE);
 
     const onPageChange = (e, page) => {
         setCurrentPage(page);
     };
 
+    // 현재 페이지에 해당하는 게시글들만 추출
     const startIndex = (currentPage - 1) * COUNT_PER_PAGE;
     const endIndex = Math.min(startIndex + COUNT_PER_PAGE, totalItems);
-    const visibleBoard = boards.slice(startIndex, endIndex);
+    const visibleBoard = (search === '' ? boards : filteredBoards).slice(startIndex, endIndex);
 
     const inputChangeHandler = (e) => {
         setSearch(e.target.value);
+        setCurrentPage(1); // 검색할 때마다 페이지를 첫 번째 페이지로 리셋
     };
 
     if (loading) {
@@ -54,10 +67,10 @@ const Free = () => {
             <div className={style.search}>
                 <Input placeholder="검색" className={style.input_search} onChange={inputChangeHandler}></Input>
             </div>
-            <hr></hr>
+            <hr />
             <div className='w-full'>
                 <div className='flex align-items-center'>
-                    <div style={{ color: '#EEF300', fontSize: 'small', marginLeft:'30px' }}>●</div>
+                    <div style={{ color: '#EEF300', fontSize: 'small', marginLeft: '30px' }}>●</div>
                     <div className='ml-3' style={{ fontWeight: 'bold', fontSize: 'larger' }}>COMMUNITY</div>
                     <div className='ml-5' style={{ fontWeight: 'bolder', fontSize: 'larger' }}>자유게시판</div>
                 </div>
@@ -70,42 +83,22 @@ const Free = () => {
                                 <div className={style.tableHeader}>조회수</div>
                                 <div className={style.tableHeader}>작성일</div>
                             </div>
-                            {search === ''
-                                ? visibleBoard.map((e) => (
-                                    <div key={e.boardId} className={style.tableRow}>
-                                        <div className={style.tableCell}>
-                                            {e.boardWriter}
-                                        </div>
-                                        <div className={style.tableCell}>
-                                            <Link to={`detail/${e.boardId}`}>{e.boardTitle}</Link>
-                                        </div>
-                                        <div className={style.tableCell}>{e.boardViewCount}</div>
-                                        <div className={style.tableCell}>{e.boardWriteDate}</div>
+                            {visibleBoard.map((e) => (
+                                <div key={e.boardId} className={style.tableRow}>
+                                    <div className={style.tableCell}>
+                                        {e.boardWriter}
                                     </div>
-                                ))
-                                : boards
-                                    .filter(
-                                        (e) =>
-                                            e.boardWriter.includes(search) ||
-                                            e.boardContents.includes(search) ||
-                                            e.boardTitle.includes(search)
-                                    )
-                                    .map((e) => (
-                                        <div key={e.boardId} className={style.tableRow}>
-                                            <div className={style.tableCell}>
-                                                {e.boardWriter}
-                                            </div>
-                                            <div className={style.tableCell}>
-                                                <Link to={`detail/${e.boardId}`}>{e.boardTitle}</Link>
-                                            </div>
-                                            <div className={style.tableCell}>{e.boardViewCount}</div>
-                                            <div className={style.tableCell}>{e.boardWriteDate}</div>
-                                        </div>
-                                    ))}
+                                    <div className={style.tableCell}>
+                                        <Link to={`detail/${e.boardId}`}>{e.boardTitle}</Link>
+                                    </div>
+                                    <div className={style.tableCell}>{e.boardViewCount}</div>
+                                    <div className={style.tableCell}>{e.boardWriteDate}</div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
-                <hr></hr>
+                <hr />
                 <div className={style.margin}>
                     <Pagination
                         count={totalPages}
@@ -130,6 +123,6 @@ const Free = () => {
             </div>
         </div>
     );
-}
+};
 
 export default Free;

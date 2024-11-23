@@ -48,9 +48,9 @@ export const CalendarUpPush = [
   },
 ];
 export const TeamBirthdays = [
-  { id: createEventId(), title: '⭐황자원 생일⭐', start: "2023-09-13", end: "2023-09-13", allDay: true, textColor: "blue", classNames: ['birthday-event'] },
-  { id: createEventId(), title: '⭐황자원 생일⭐', start: "2024-09-13", end: "2024-09-13", allDay: true, textColor: "blue", classNames: ['birthday-event'] },
-  { id: createEventId(), title: '⭐황자원 생일⭐', start: "2025-09-13", end: "2025-09-13", allDay: true, textColor: "blue", classNames: ['birthday-event'] },
+  // { id: createEventId(), title: '⭐황자원 생일⭐', start: "2023-09-13", end: "2023-09-13", allDay: true, textColor: "blue", classNames: ['birthday-event'] },
+  // { id: createEventId(), title: '⭐황자원 생일⭐', start: "2024-09-13", end: "2024-09-13", allDay: true, textColor: "blue", classNames: ['birthday-event'] },
+  // { id: createEventId(), title: '⭐황자원 생일⭐', start: "2025-09-13", end: "2025-09-13", allDay: true, textColor: "blue", classNames: ['birthday-event'] },
 ];
 
 function createEventId() {
